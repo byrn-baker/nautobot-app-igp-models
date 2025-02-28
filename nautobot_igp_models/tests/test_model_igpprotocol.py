@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from igp_models import models
+from nautobot_igp_models import models
 
 
 class TestIGPProtocol(TestCase):

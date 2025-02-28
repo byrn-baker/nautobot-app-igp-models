@@ -119,12 +119,12 @@ if not _TESTING:
 #
 
 # Enable installed Apps. Add the name of each App to the list.
-PLUGINS = ["igp_models"]
+PLUGINS = ["nautobot_igp_models"]
 
 # Apps configuration settings. These settings are used by various Apps that the user may have installed.
 # Each key in the dictionary is the name of an installed App and its value is a dictionary of settings.
 # PLUGINS_CONFIG = {
-#     'igp_models': {
+#     'nautobot_igp_models': {
 #         'foo': 'bar',
 #         'buzz': 'bazz'
 #     }

@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "igp-models"
+name = "nautobot-igp-models"
 version = "0.1.0"
-description = "Igp Models"
+description = "Nautobot Igp Models"
 authors = ["Byrn Baker <byrnbaker@msn.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/byrn-baker/nautobot-app-igp-models"
 repository = "https://github.com/byrn-baker/nautobot-app-igp-models"
-documentation = "https://docs.nautobot.com/projects/igp-models/en/latest/"
+documentation = "https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/"
 keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
 classifiers = [
     "Intended Audience :: Developers",
@@ -20,11 +20,11 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 packages = [
-    { include = "igp_models" },
+    { include = "nautobot_igp_models" },
 ]
 include = [
     # Poetry by default will exclude files that are in .gitignore
-    "igp_models/static/igp_models/docs/**/*",
+    "nautobot_igp_models/static/nautobot_igp_models/docs/**/*",
 ]
 
 [tool.poetry.dependencies]
@@ -123,10 +123,10 @@ ignore = [
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"igp_models/migrations/*" = [
+"nautobot_igp_models/migrations/*" = [
     "D",
 ]
-"igp_models/tests/*" = [
+"nautobot_igp_models/tests/*" = [
     "D",
     "S"
 ]
@@ -136,7 +136,7 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.towncrier]
-package = "igp_models"
+package = "nautobot_igp_models"
 directory = "changes"
 filename = "docs/admin/release_notes/version_X.Y.md"
 template = "development/towncrier_template.j2"

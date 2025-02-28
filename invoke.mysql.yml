@@ -1,6 +1,6 @@
 ---
-igp_models:
-  project_name: "igp-models"
+nautobot_igp_models:
+  project_name: "nautobot-igp-models"
   nautobot_ver: "2.0.0"
   local: false
   python_ver: "3.11"

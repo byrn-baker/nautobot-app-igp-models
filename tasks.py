@@ -46,13 +46,13 @@ def is_truthy(arg):
 
 
 # Use pyinvoke configuration for default values, see http://docs.pyinvoke.org/en/stable/concepts/configuration.html
-# Variables may be overwritten in invoke.yml or by the environment variables INVOKE_IGP_MODELS_xxx
-namespace = Collection("igp_models")
+# Variables may be overwritten in invoke.yml or by the environment variables INVOKE_NAUTOBOT_IGP_MODELS_xxx
+namespace = Collection("nautobot_igp_models")
 namespace.configure(
     {
-        "igp_models": {
+        "nautobot_igp_models": {
             "nautobot_ver": "2.3.1",
-            "project_name": "igp-models",
+            "project_name": "nautobot-igp-models",
             "python_ver": "3.11",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
@@ -69,7 +69,7 @@ namespace.configure(
 
 
 def _is_compose_included(context, name):
-    return f"docker-compose.{name}.yml" in context.igp_models.compose_files
+    return f"docker-compose.{name}.yml" in context.nautobot_igp_models.compose_files
 
 
 def _await_healthy_service(context, service):
@@ -121,19 +121,19 @@ def docker_compose(context, command, **kwargs):
     build_env = {
         # Note: 'docker compose logs' will stop following after 60 seconds by default,
         # so we are overriding that by setting this environment variable.
-        "COMPOSE_HTTP_TIMEOUT": context.igp_models.compose_http_timeout,
-        "NAUTOBOT_VER": context.igp_models.nautobot_ver,
-        "PYTHON_VER": context.igp_models.python_ver,
+        "COMPOSE_HTTP_TIMEOUT": context.nautobot_igp_models.compose_http_timeout,
+        "NAUTOBOT_VER": context.nautobot_igp_models.nautobot_ver,
+        "PYTHON_VER": context.nautobot_igp_models.python_ver,
         **kwargs.pop("env", {}),
     }
     compose_command_tokens = [
         "docker compose",
-        f"--project-name {context.igp_models.project_name}",
-        f'--project-directory "{context.igp_models.compose_dir}"',
+        f"--project-name {context.nautobot_igp_models.project_name}",
+        f'--project-directory "{context.nautobot_igp_models.compose_dir}"',
     ]
 
-    for compose_file in context.igp_models.compose_files:
-        compose_file_path = os.path.join(context.igp_models.compose_dir, compose_file)
+    for compose_file in context.nautobot_igp_models.compose_files:
+        compose_file_path = os.path.join(context.nautobot_igp_models.compose_dir, compose_file)
         compose_command_tokens.append(f' -f "{compose_file_path}"')
 
     compose_command_tokens.append(command)
@@ -151,7 +151,7 @@ def docker_compose(context, command, **kwargs):
 
 def run_command(context, command, service="nautobot", **kwargs):
     """Wrapper to run a command locally or inside the nautobot container."""
-    if is_truthy(context.igp_models.local):
+    if is_truthy(context.nautobot_igp_models.local):
         if "command_env" in kwargs:
             kwargs["env"] = {
                 **kwargs.get("env", {}),
@@ -197,7 +197,7 @@ def build(context, force_rm=False, cache=True):
     if force_rm:
         command += " --force-rm"
 
-    print(f"Building Nautobot with Python {context.igp_models.python_ver}...")
+    print(f"Building Nautobot with Python {context.nautobot_igp_models.python_ver}...")
     docker_compose(context, command)
 
 
@@ -211,10 +211,10 @@ def generate_packages(context):
 def _get_docker_nautobot_version(context, nautobot_ver=None, python_ver=None):
     """Extract Nautobot version from base docker image."""
     if nautobot_ver is None:
-        nautobot_ver = context.igp_models.nautobot_ver
+        nautobot_ver = context.nautobot_igp_models.nautobot_ver
     if python_ver is None:
-        python_ver = context.igp_models.python_ver
-    dockerfile_path = os.path.join(context.igp_models.compose_dir, "Dockerfile")
+        python_ver = context.nautobot_igp_models.python_ver
+    dockerfile_path = os.path.join(context.nautobot_igp_models.compose_dir, "Dockerfile")
     base_image = context.run(f"grep --max-count=1 '^FROM ' {dockerfile_path}", hide=True).stdout.strip().split(" ")[1]
     base_image = base_image.replace(r"${NAUTOBOT_VER}", nautobot_ver).replace(r"${PYTHON_VER}", python_ver)
     pip_nautobot_ver = context.run(f"docker run --rm --entrypoint '' {base_image} pip show nautobot", hide=True)
@@ -249,7 +249,7 @@ def lock(context, check=False, constrain_nautobot_ver=False, constrain_python_ve
         docker_nautobot_version = _get_docker_nautobot_version(context)
         command = f"poetry add --lock nautobot@{docker_nautobot_version}"
         if constrain_python_ver:
-            command += f" --python {context.igp_models.python_ver}"
+            command += f" --python {context.nautobot_igp_models.python_ver}"
         try:
             run_command(context, command, hide=True)
             output = run_command(context, command, hide=True)
@@ -257,11 +257,9 @@ def lock(context, check=False, constrain_nautobot_ver=False, constrain_python_ve
             print(output.stderr, file=sys.stderr, end="")
         except UnexpectedExit:
             print("Unable to add Nautobot dependency with version constraint, falling back to git branch.")
-            command = (
-                f"poetry add --lock git+https://github.com/nautobot/nautobot.git#{context.igp_models.nautobot_ver}"
-            )
+            command = f"poetry add --lock git+https://github.com/nautobot/nautobot.git#{context.nautobot_igp_models.nautobot_ver}"
             if constrain_python_ver:
-                command += f" --python {context.igp_models.python_ver}"
+                command += f" --python {context.nautobot_igp_models.python_ver}"
             run_command(context, command)
     else:
         command = f"poetry {'check' if check else 'lock --no-update'}"
@@ -443,7 +441,7 @@ def createsuperuser(context, user="admin"):
 )
 def makemigrations(context, name=""):
     """Perform makemigrations operation in Django."""
-    command = "nautobot-server makemigrations igp_models"
+    command = "nautobot-server makemigrations nautobot_igp_models"
 
     if name:
         command += f" --name {name}"
@@ -661,7 +659,7 @@ def docs(context):
     """Build and serve docs locally for development."""
     command = "mkdocs serve -v"
 
-    if is_truthy(context.igp_models.local):
+    if is_truthy(context.nautobot_igp_models.local):
         print(">>> Serving Documentation at http://localhost:8001")
         run_command(context, command)
     else:
@@ -689,7 +687,7 @@ def help_task(context):
 
 @task(
     help={
-        "version": "Version of Igp Models to generate the release notes for.",
+        "version": "Version of Nautobot Igp Models to generate the release notes for.",
     }
 )
 def generate_release_notes(context, version=""):
@@ -721,17 +719,17 @@ def pylint(context):
     exit_code = 0
 
     base_pylint_command = 'pylint --verbose --init-hook "import nautobot; nautobot.setup()" --rcfile pyproject.toml'
-    command = f"{base_pylint_command} igp_models"
+    command = f"{base_pylint_command} nautobot_igp_models"
     if not run_command(context, command, warn=True):
         exit_code = 1
 
     # run the pylint_django migrations checkers on the migrations directory, if one exists
-    migrations_dir = Path(__file__).absolute().parent / Path("igp_models") / Path("migrations")
+    migrations_dir = Path(__file__).absolute().parent / Path("nautobot_igp_models") / Path("migrations")
     if migrations_dir.is_dir():
         migrations_pylint_command = (
             f"{base_pylint_command} --load-plugins=pylint_django.checkers.migrations"
             " --disable=all --enable=fatal,new-db-field-with-default,missing-backwards-migration-callable"
-            " igp_models.migrations"
+            " nautobot_igp_models.migrations"
         )
         if not run_command(context, migrations_pylint_command, warn=True):
             exit_code = 1
@@ -819,7 +817,7 @@ def check_migrations(context):
 def unittest(  # noqa: PLR0913
     context,
     keepdb=False,
-    label="igp_models",
+    label="nautobot_igp_models",
     failfast=False,
     buffer=True,
     pattern="",
@@ -845,7 +843,7 @@ def unittest(  # noqa: PLR0913
 @task
 def unittest_coverage(context):
     """Report on code test coverage as measured by 'invoke unittest'."""
-    command = "coverage report --skip-covered --include 'igp_models/*' --omit *migrations*"
+    command = "coverage report --skip-covered --include 'nautobot_igp_models/*' --omit *migrations*"
 
     run_command(context, command)
 
@@ -860,7 +858,7 @@ def unittest_coverage(context):
 def tests(context, failfast=False, keepdb=False, lint_only=False):
     """Run all tests for this app."""
     # If we are not running locally, start the docker containers so we don't have to for each test
-    if not is_truthy(context.igp_models.local):
+    if not is_truthy(context.nautobot_igp_models.local):
         print("Starting Docker Containers...")
         start(context)
     # Sorted loosely from fastest to slowest

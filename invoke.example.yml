@@ -1,5 +1,5 @@
 ---
-igp_models:
+nautobot_igp_models:
   nautobot_ver: "2.0.0"
   python_ver: "3.11"
   # local: false
@@ -7,7 +7,7 @@ igp_models:
 
 # The following is an example of using MySQL as the database backend
 # ---
-# igp_models:
+# nautobot_igp_models:
 #   compose_files:
 #     - "docker-compose.base.yml"
 #     - "docker-compose.redis.yml"

@@ -2,8 +2,8 @@
 
 from nautobot.apps.testing import APIViewTestCases
 
-from igp_models import models
-from igp_models.tests import fixtures
+from nautobot_igp_models import models
+from nautobot_igp_models.tests import fixtures
 
 
 class IGPProtocolAPIViewTest(APIViewTestCases.APIViewTestCase):

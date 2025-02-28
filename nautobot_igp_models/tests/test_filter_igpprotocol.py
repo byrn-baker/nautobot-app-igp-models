@@ -2,8 +2,8 @@
 
 from django.test import TestCase
 
-from igp_models import filters, models
-from igp_models.tests import fixtures
+from nautobot_igp_models import filters, models
+from nautobot_igp_models.tests import fixtures
 
 
 class IGPProtocolFilterTestCase(TestCase):

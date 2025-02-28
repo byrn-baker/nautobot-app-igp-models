@@ -1,0 +1,25 @@
+{% if igp_routing_instances %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>IGP Routing Instances</strong></div>
+        <table class="table table-hover panel-body">
+        {% for igp_routing_instance in igp_routing_instances %}
+            <tr>
+                <td>
+                    <a href="{{ igp_routing_instance.get_absolute_url }}">{{ igp_routing_instance }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% else %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>IGP Routing Instances</strong></div>
+        <table class="table table-hover panel-body">
+            <tr>
+                <td>
+                    No routing instances
+                </td>
+            </tr>
+        </table>
+    </div>
+{% endif %}

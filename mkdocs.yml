@@ -1,9 +1,9 @@
 ---
 dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/docs"
-site_dir: "igp_models/static/igp_models/docs"
-site_name: "Igp Models Documentation"
-site_url: "https://docs.nautobot.com/projects/igp-models/en/latest/"
+site_dir: "nautobot_igp_models/static/nautobot_igp_models/docs"
+site_name: "Nautobot Igp Models Documentation"
+site_url: "https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/"
 repo_url: "https://github.com/byrn-baker/nautobot-app-igp-models"
 copyright: "Copyright &copy; The Authors"
 theme:

@@ -1,0 +1,29 @@
+{% load helpers %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>OSPF Interface Confiuguration Details</strong>
+  </div>
+  <table class="table table-hover panel-body">
+    <tr>
+      <td>OSPF Configuration</td>
+      <td>{{ object.ospf_config|hyperlink }}</td>
+    </tr>
+    <tr>
+      <td>Interface</td>
+      <td>{{ object.interface|hyperlink|placeholder }}</td>
+    </tr>
+    <tr>
+      <td>Area</td>
+      <td>{{ object.area }}</td>
+    </tr>
+    <tr>
+      <td>Cost</td>
+      <td>{{ object.cost }}</td>
+    </tr>
+    <tr>
+      <td>Status</td>
+      <td>{{ object.status|hyperlink|placeholder }}</td>
+    </tr>
+  </table>
+</div>

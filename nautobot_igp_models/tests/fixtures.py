@@ -1,6 +1,6 @@
 """Create fixtures for tests."""
 
-from igp_models.models import IGPProtocol
+from nautobot_igp_models.models import IGPProtocol
 
 
 def create_igpprotocol():
