@@ -1,1 +1,1 @@
-"""Unit tests for igp_models app."""
+"""Unit tests for nautobot_igp_models app."""

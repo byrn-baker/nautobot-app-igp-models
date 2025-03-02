@@ -5,15 +5,14 @@ from nautobot.apps.api import NautobotModelSerializer, TaggedModelSerializerMixi
 from nautobot_igp_models import models
 
 
-class IGPInstanceSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
-    """IGPInstance Serializer."""
+class IGPRoutingInstanceSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
+    """IGPRoutingInstance Serializer."""
 
     class Meta:
         """Meta attributes."""
 
-        model = models.IGPInstance
+        model = models.IGPRoutingInstance
         fields = "__all__"
-
 
 class ISISConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """ISISConfiguration Serializer."""
@@ -32,7 +31,6 @@ class ISISInterfaceConfigurationSerializer(NautobotModelSerializer, TaggedModelS
 
         model = models.ISISInterfaceConfiguration
         fields = "__all__"
-
 
 class OSPFConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """OSPFConfiguration Serializer."""

@@ -306,4 +306,4 @@ invoke.yml
 public
 /compose.yaml
 /dump.sql
-/igp_models/static/igp_models/docs
+/nautobot_igp_models/static/nautobot_igp_models/docs

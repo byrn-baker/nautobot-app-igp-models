@@ -1,4 +1,4 @@
-"""Unit tests for igp_models."""
+"""Unit tests for nautobot_igp_models."""
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 class PlaceholderAPITest(TestCase):
-    """Test the IgpModels API."""
+    """Test the NautobotIgpModels API."""
 
     def setUp(self):
         """Create a superuser and token for API calls."""

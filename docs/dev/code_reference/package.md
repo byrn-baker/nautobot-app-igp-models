@@ -1,1 +1,1 @@
-::: igp_models
+::: nautobot_igp_models

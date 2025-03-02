@@ -12,17 +12,17 @@ class NautobotIgpModelsConfig(NautobotAppConfig):
     """App configuration for the nautobot_igp_models app."""
 
     name = "nautobot_igp_models"
-    verbose_name = "Nautobot Igp Models"
+    verbose_name = "Nautobot IGP Models"
     version = __version__
     author = "Byrn Baker"
-    description = "Nautobot Igp Models."
+    description = "Nautobot IGP Models."
     base_url = "nautobot-igp-models"
     required_settings = []
     min_version = "2.0.0"
     max_version = "2.9999"
     default_settings = {
         "default_statuses": {
-            "IGPInstance": ["Planned", "Active", "Decommissioned"],
+            "IGPRoutingInstance": ["Planned", "Active", "Decommissioned"],
             "ISISConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],
             "ISISInterfaceConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],
             "OSPFConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],

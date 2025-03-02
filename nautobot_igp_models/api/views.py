@@ -6,13 +6,12 @@ from nautobot_igp_models import filters, models
 from nautobot_igp_models.api import serializers
 
 
-class IGPInstanceViewSet(NautobotModelViewSet):  # pylint: disable=too-many-ancestors
-    """IGPInstance viewset."""
+class IGPRoutingInstanceViewSet(NautobotModelViewSet):  # pylint: disable=too-many-ancestors
+    """IGPRoutingInstance viewset."""
 
-    queryset = models.IGPInstance.objects.all()
-    serializer_class = serializers.IGPInstanceSerializer
-    filterset_class = filters.IGPInstanceFilterSet
-
+    queryset = models.IGPRoutingInstance.objects.all()
+    serializer_class = serializers.IGPRoutingInstanceSerializer
+    filterset_class = filters.IGPRoutingInstanceFilterSet
 
 class ISISConfigurationViewSet(NautobotModelViewSet):  # pylint: disable=too-many-ancestors
     """ISISConfiguration viewset."""
@@ -21,6 +20,12 @@ class ISISConfigurationViewSet(NautobotModelViewSet):  # pylint: disable=too-man
     serializer_class = serializers.ISISConfigurationSerializer
     filterset_class = filters.ISISConfigurationFilterSet
 
+class ISISInterfaceConfigurationViewSet(NautobotModelViewSet):  # pylint: disable=too-many-ancestors
+    """ISIS Interface Configuration viewset."""
+
+    queryset = models.ISISInterfaceConfiguration.objects.all()
+    serializer_class = serializers.ISISInterfaceConfigurationSerializer
+    filterset_class = filters.ISISInterfaceConfigurationFilterSet
 
 class OSPFConfigurationViewSet(NautobotModelViewSet):  # pylint: disable=too-many-ancestors
     """OSPFConfiguration viewset."""
@@ -28,3 +33,10 @@ class OSPFConfigurationViewSet(NautobotModelViewSet):  # pylint: disable=too-man
     queryset = models.OSPFConfiguration.objects.all()
     serializer_class = serializers.OSPFConfigurationSerializer
     filterset_class = filters.OSPFConfigurationFilterSet
+
+class OSPFInterfaceConfigurationViewSet(NautobotModelViewSet):  # pylint: disable=too-many-ancestors
+    """OSPF Interface Configuration viewset."""
+
+    queryset = models.OSPFInterfaceConfiguration.objects.all()
+    serializer_class = serializers.OSPFInterfaceConfigurationSerializer
+    filterset_class = filters.OSPFInterfaceConfigurationFilterSet

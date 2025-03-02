@@ -1,23 +1,22 @@
-"""Views for igp_models."""
+"""Views for nautobot_igp_models."""
 
 from nautobot.apps.views import NautobotUIViewSet
 
-from . import filters, forms, models, tables
-from .api import serializers
+from nautobot_igp_models import filters, forms, models, tables
+from nautobot_igp_models.api import serializers
 
 
-class IGPInstanceUIViewSet(NautobotUIViewSet):
-    """UIViewset for IGPInstance model."""
+class IGPRoutingInstanceUIViewSet(NautobotUIViewSet):
+    """ViewSet for IGPRoutingInstance views."""
 
-    bulk_update_form_class = forms.IGPInstanceBulkEditForm
-    filterset_class = filters.IGPInstanceFilterSet
-    filterset_form_class = forms.IGPInstanceFilterForm
-    form_class = forms.IGPInstanceForm
+    bulk_update_form_class = forms.IGPRoutingInstanceBulkEditForm
+    filterset_class = filters.IGPRoutingInstanceFilterSet
+    filterset_form_class = forms.IGPRoutingInstanceFilterForm
+    form_class = forms.IGPRoutingInstanceForm
     lookup_field = "pk"
-    queryset = models.IGPInstance.objects.all()
-    serializer_class = serializers.IGPInstanceSerializer
-    table_class = tables.IGPInstanceTable
-
+    queryset = models.IGPRoutingInstance.objects.all()
+    serializer_class = serializers.IGPRoutingInstanceSerializer
+    table_class = tables.IGPRoutingInstanceTable
 
 class ISISConfigurationUIViewSet(NautobotUIViewSet):
     """UIViewset for ISISConfiguration model."""
@@ -42,7 +41,6 @@ class ISISInterfaceConfigurationUIViewSet(NautobotUIViewSet):
     queryset = models.ISISInterfaceConfiguration.objects.all()
     serializer_class = serializers.ISISInterfaceConfigurationSerializer
     table_class = tables.ISISInterfaceConfigurationTable
-
 
 class OSPFConfigurationUIViewSet(NautobotUIViewSet):
     """UIViewset for OSPFConfiguration model."""

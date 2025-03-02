@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "nautobot-igp-models"
 version = "0.1.0"
-description = "Nautobot Igp Models"
-authors = ["Byrn Baker <byrnbaker@msn.com>"]
+description = "Nautobot IGP Models"
+authors = ["Byrn Baker <byrnbaker@icloud.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/byrn-baker/nautobot-app-igp-models"

@@ -6,11 +6,11 @@ from nautobot_igp_models import models
 from nautobot_igp_models.tests import fixtures
 
 
-class IGPProtocolViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=too-many-ancestors
-    """Test the IGPProtocol views."""
+    """Test the IGPRoutingInstance views."""
 
-    model = models.IGPProtocol
+    model = models.IGPRoutingInstance
     bulk_edit_data = {"description": "Bulk edit views"}
     form_data = {
         "name": "Test 1",
@@ -25,4 +25,4 @@ class IGPProtocolViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        fixtures.create_igpprotocol()
+        fixtures.create_igproutinginstance()

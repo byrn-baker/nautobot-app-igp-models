@@ -1,4 +1,4 @@
-"""Menu items for the Nautobot IGP Models app."""
+"""Menu items."""
 
 from nautobot.apps.ui import NavMenuAddButton, NavMenuGroup, NavMenuItem, NavMenuTab
 
@@ -10,15 +10,15 @@ menu_items = (
             NavMenuGroup(
                 name="IGP - Link-State",
                 weight=150,
-                items=(
+                items = (
                     NavMenuItem(
-                        link="plugins:nautobot_igp_models:igpinstance_list",
-                        name="IGP Routing Instances",
-                        permissions=["nautobot_igp_models.view_igpinstance"],
+                        link="plugins:nautobot_igp_models:igproutinginstance_list",
+                        name="Nautobot IGP Models",
+                        permissions=["nautobot_igp_models.view_igproutinginstance"],
                         buttons=(
                             NavMenuAddButton(
-                                link="plugins:nautobot_igp_models:igpinstance_add",
-                                permissions=["nautobot_igp_models.add_igpinstance"],
+                                link="plugins:nautobot_igp_models:igproutinginstance_add",
+                                permissions=["nautobot_igp_models.add_igproutinginstance"],
                             ),
                         ),
                     ),
@@ -66,7 +66,7 @@ menu_items = (
                             ),
                         ),
                     ),
-                ),
+                )
             ),
         ),
     ),

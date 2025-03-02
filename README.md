@@ -1,4 +1,4 @@
-# Nautobot Igp Models
+# Nautobot IGP Models
 
 <!--
 Developer Note - Remove Me!

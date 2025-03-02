@@ -1,5 +1,5 @@
-# Igp Models API Package
+# Nautobot IGP Models API Package
 
-::: igp_models.api
+::: nautobot_igp_models.api
     options:
         show_submodules: True

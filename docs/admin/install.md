@@ -21,31 +21,31 @@ Here you will find detailed instructions on how to **install** and **configure**
 ## Install Guide
 
 !!! note
-    Apps can be installed from the [Python Package Index](https://pypi.org/) or locally. See the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/) for more details. The pip package name for this app is [`igp-models`](https://pypi.org/project/igp-models/).
+    Apps can be installed from the [Python Package Index](https://pypi.org/) or locally. See the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/) for more details. The pip package name for this app is [`nautobot-igp-models`](https://pypi.org/project/nautobot-igp-models/).
 
 The app is available as a Python package via PyPI and can be installed with `pip`:
 
 ```shell
-pip install igp-models
+pip install nautobot-igp-models
 ```
 
-To ensure Igp Models is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `igp-models` package:
+To ensure Nautobot IGP Models is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-igp-models` package:
 
 ```shell
-echo igp-models >> local_requirements.txt
+echo nautobot-igp-models >> local_requirements.txt
 ```
 
 Once installed, the app needs to be enabled in your Nautobot configuration. The following block of code below shows the additional configuration required to be added to your `nautobot_config.py` file:
 
-- Append `"igp_models"` to the `PLUGINS` list.
-- Append the `"igp_models"` dictionary to the `PLUGINS_CONFIG` dictionary and override any defaults.
+- Append `"nautobot_igp_models"` to the `PLUGINS` list.
+- Append the `"nautobot_igp_models"` dictionary to the `PLUGINS_CONFIG` dictionary and override any defaults.
 
 ```python
 # In your nautobot_config.py
-PLUGINS = ["igp_models"]
+PLUGINS = ["nautobot_igp_models"]
 
 # PLUGINS_CONFIG = {
-#   "igp_models": {
+#   "nautobot_igp_models": {
 #     ADD YOUR SETTINGS HERE
 #   }
 # }

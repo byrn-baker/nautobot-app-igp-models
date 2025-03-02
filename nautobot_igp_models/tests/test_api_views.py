@@ -1,4 +1,4 @@
-"""Unit tests for igp_models."""
+"""Unit tests for nautobot_igp_models."""
 
 from nautobot.apps.testing import APIViewTestCases
 
@@ -6,11 +6,11 @@ from nautobot_igp_models import models
 from nautobot_igp_models.tests import fixtures
 
 
-class IGPProtocolAPIViewTest(APIViewTestCases.APIViewTestCase):
+class IGPRoutingInstanceAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=too-many-ancestors
-    """Test the API viewsets for IGPProtocol."""
+    """Test the API viewsets for IGPRoutingInstance."""
 
-    model = models.IGPProtocol
+    model = models.IGPRoutingInstance
     create_data = [
         {
             "name": "Test Model 1",
@@ -24,4 +24,4 @@ class IGPProtocolAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        fixtures.create_igpprotocol()
+        fixtures.create_igproutinginstance()
