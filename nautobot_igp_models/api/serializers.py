@@ -14,6 +14,7 @@ class IGPRoutingInstanceSerializer(NautobotModelSerializer, TaggedModelSerialize
         model = models.IGPRoutingInstance
         fields = "__all__"
 
+
 class ISISConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """ISISConfiguration Serializer."""
 
@@ -22,6 +23,7 @@ class ISISConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializer
 
         model = models.ISISConfiguration
         fields = "__all__"
+
 
 class ISISInterfaceConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """ISISInterfaceConfiguration Serializer."""
@@ -32,6 +34,7 @@ class ISISInterfaceConfigurationSerializer(NautobotModelSerializer, TaggedModelS
         model = models.ISISInterfaceConfiguration
         fields = "__all__"
 
+
 class OSPFConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """OSPFConfiguration Serializer."""
 
@@ -40,6 +43,7 @@ class OSPFConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializer
 
         model = models.OSPFConfiguration
         fields = "__all__"
+
 
 class OSPFInterfaceConfigurationSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """OSPFInterfaceConfiguration Serializer."""

@@ -15,7 +15,7 @@ class IGPRoutingInstanceFilterTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         """Setup test data for IGPRoutingInstance Model."""
-        fixtures.create_igproutinginstance()
+        fixtures.create_igp_routing_instances()
 
     def test_q_search_name(self):
         """Test using Q search with name of IGPRoutingInstance."""

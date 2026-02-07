@@ -10,15 +10,34 @@ Prior to removing the app from the `nautobot_config.py`, run the following comma
 nautobot-server migrate nautobot_igp_models zero
 ```
 
-!!! warning "Developer Note - Remove Me!"
-    Any other cleanup operations to ensure the database is clean after the app is removed. Is there anything else that needs cleaning up, such as CFs, relationships, etc. if they're no longer desired?
+This will remove all database tables, indexes, and constraints created by the IGP Models app. Note that this action will permanently delete all IGP routing instance data, ISIS configurations, OSPF configurations, and related interface configurations stored in the database.
 
 ## Remove App configuration
 
 Remove the configuration you added in `nautobot_config.py` from `PLUGINS` & `PLUGINS_CONFIG`.
 
+Remove or comment out these lines:
+
+```python
+PLUGINS = [
+    "nautobot_igp_models",  # Remove this line
+]
+
+PLUGINS_CONFIG = {
+    # "nautobot_igp_models": {  # Remove this section
+    #     # Add any plugin-specific configuration here
+    # }
+}
+```
+
 ## Uninstall the package
 
 ```bash
 $ pip3 uninstall nautobot-igp-models
+```
+
+After uninstalling, restart the Nautobot services:
+
+```bash
+sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 ```

@@ -18,6 +18,7 @@ class IGPRoutingInstanceUIViewSet(NautobotUIViewSet):
     serializer_class = serializers.IGPRoutingInstanceSerializer
     table_class = tables.IGPRoutingInstanceTable
 
+
 class ISISConfigurationUIViewSet(NautobotUIViewSet):
     """UIViewset for ISISConfiguration model."""
 
@@ -29,7 +30,8 @@ class ISISConfigurationUIViewSet(NautobotUIViewSet):
     queryset = models.ISISConfiguration.objects.all()
     serializer_class = serializers.ISISConfigurationSerializer
     table_class = tables.ISISConfigurationTable
-    
+
+
 class ISISInterfaceConfigurationUIViewSet(NautobotUIViewSet):
     """UIViewset for ISISInterfaceConfiguration model."""
 
@@ -42,6 +44,7 @@ class ISISInterfaceConfigurationUIViewSet(NautobotUIViewSet):
     serializer_class = serializers.ISISInterfaceConfigurationSerializer
     table_class = tables.ISISInterfaceConfigurationTable
 
+
 class OSPFConfigurationUIViewSet(NautobotUIViewSet):
     """UIViewset for OSPFConfiguration model."""
 
@@ -53,6 +56,7 @@ class OSPFConfigurationUIViewSet(NautobotUIViewSet):
     queryset = models.OSPFConfiguration.objects.all()
     serializer_class = serializers.OSPFConfigurationSerializer
     table_class = tables.OSPFConfigurationTable
+
 
 class OSPFInterfaceConfigurationUIViewSet(NautobotUIViewSet):
     """UIViewset for OSPFInterfaceConfiguration model."""

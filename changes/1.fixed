@@ -1,0 +1,1 @@
+Fixed critical AttributeError bugs in OSPFConfiguration and OSPFInterfaceConfiguration table views by removing non-existent field references.

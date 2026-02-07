@@ -1,6 +1,8 @@
 """Filtering for nautobot_igp_models."""
+
 import django_filters
-from nautobot.apps.filters import NameSearchFilterSet, NautobotFilterSet, StatusModelFilterSetMixin
+from nautobot.apps.filters import NameSearchFilterSet, NautobotFilterSet, SearchFilter, StatusModelFilterSetMixin
+from nautobot.dcim.models import Interface
 
 from nautobot_igp_models import models
 
@@ -16,12 +18,16 @@ class IGPRoutingInstanceFilterSet(NautobotFilterSet, NameSearchFilterSet, Status
         # add any fields from the model that you would like to filter your searches by using those
         fields = ["id", "name", "description", "device", "protocol", "router_id", "vrf", "isis_area", "status"]
 
+
 class ISISConfigurationFilterSet(NautobotFilterSet, StatusModelFilterSetMixin):
     """Filter capabilities for ISISConfiguration objects."""
 
-    instance_id = django_filters.ModelMultipleChoiceFilter(
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="ISIS"), label="IGP Instance (ID)"
+    q = SearchFilter(
+        filter_predicates={
+            "name": "icontains",
+        },
     )
+
     instance = django_filters.ModelMultipleChoiceFilter(
         field_name="instance__device__name",
         queryset=models.IGPRoutingInstance.objects.filter(protocol="ISIS"),
@@ -32,76 +38,55 @@ class ISISConfigurationFilterSet(NautobotFilterSet, StatusModelFilterSetMixin):
 
     class Meta:
         model = models.ISISConfiguration
-        fields = ["id", "instance_id", "instance", "system_id", "status"]
+        fields = ["id", "instance", "system_id", "status"]
+
 
 class ISISInterfaceConfigurationFilterSet(NautobotFilterSet, StatusModelFilterSetMixin):
     """Filter capabilities for ISISInterfaceConfiguration objects."""
 
-    instance_id = django_filters.ModelMultipleChoiceFilter(
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="ISIS"), label="IGP Instance (ID)"
+    isis_config = django_filters.ModelChoiceFilter(
+        queryset=models.ISISConfiguration.objects.all(),
+        label="ISIS Configuration",
     )
-    instance = django_filters.ModelMultipleChoiceFilter(
-        field_name="instance__device__name",
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="ISIS"),
-        to_field_name="device__name",
-        label="IGP Instance (Device Name)",
+
+    interface = django_filters.ModelChoiceFilter(
+        queryset=Interface.objects.all(),
+        label="Interface",
+        method="filter_interface_by_device",
     )
-    interface = django_filters.CharFilter(lookup_expr="exact", label="Interface")
-    circuit_type = django_filters.MultipleChoiceFilter(choices=models.ISISInterfaceConfiguration._meta.get_field("circuit_type").choices, label="Circuit Type")
-    metric = django_filters.NumberFilter(lookup_expr="exact", label="Metric")
-    
+
+    def filter_interface_by_device(self, queryset, name, value):
+        if value:
+            return queryset.filter(device=value.device)
+        return queryset
+
     class Meta:
         model = models.ISISInterfaceConfiguration
-        fields = ["id", "instance_id", "instance", "interface", "circuit_type", "metric", "status"]
+        fields = ["isis_config", "interface", "circuit_type", "metric", "status"]
+
 
 class OSPFConfigurationFilterSet(NautobotFilterSet):
     """Filter capabilities for OSPFConfiguration objects."""
 
-    instance_id = django_filters.ModelMultipleChoiceFilter(
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"), label="IGP Instance (ID)"
-    )
     instance = django_filters.ModelMultipleChoiceFilter(
         field_name="instance__device__name",
         queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"),
         to_field_name="device__name",
         label="IGP Instance (Device Name)",
     )
-    area = django_filters.CharFilter(lookup_expr="exact", label="OSPF Area")
     process_id = django_filters.NumberFilter(lookup_expr="exact", label="Process ID")
 
     class Meta:
         model = models.OSPFConfiguration
-        fields = [
-            "id",
-            "instance_id",
-            "instance",
-            "area",
-            "process_id",
-            "status",
-        ]
+        fields = ["id", "instance", "process_id", "status"]
+
 
 class OSPFInterfaceConfigurationFilterSet(NautobotFilterSet):
-    instance_id = django_filters.ModelMultipleChoiceFilter(
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"), label="IGP Instance (ID)"
-    )
-    instance = django_filters.ModelMultipleChoiceFilter(
-        field_name="instance__device__name",
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"),
-        to_field_name="device__name",
-        label="IGP Instance (Device Name)",
-    )
+    ospf_config_name = django_filters.CharFilter(lookup_expr="exact", label="OSPF Configuration")
     interface = django_filters.CharFilter(lookup_expr="exact", label="Interface")
     area = django_filters.CharFilter(lookup_expr="exact", label="OSPF Area")
     cost = django_filters.NumberFilter(lookup_expr="exact", label="Cost")
-    
-    class meta:
+
+    class Meta:
         model = models.OSPFInterfaceConfiguration
-        fields = [
-            "id",
-            "instance_id",
-            "instance",
-            "interface",
-            "area",
-            "cost",
-            "status",
-        ]
+        fields = ["id", "ospf_config_name", "interface", "area", "cost", "status"]

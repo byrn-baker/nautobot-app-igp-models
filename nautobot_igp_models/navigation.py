@@ -10,7 +10,7 @@ menu_items = (
             NavMenuGroup(
                 name="IGP - Link-State",
                 weight=150,
-                items = (
+                items=(
                     NavMenuItem(
                         link="plugins:nautobot_igp_models:igproutinginstance_list",
                         name="Nautobot IGP Models",
@@ -66,7 +66,7 @@ menu_items = (
                             ),
                         ),
                     ),
-                )
+                ),
             ),
         ),
     ),

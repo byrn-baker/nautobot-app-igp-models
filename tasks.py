@@ -51,7 +51,7 @@ namespace = Collection("nautobot_igp_models")
 namespace.configure(
     {
         "nautobot_igp_models": {
-            "nautobot_ver": "2.3.1",
+            "nautobot_ver": "3.0.6",
             "project_name": "nautobot-igp-models",
             "python_ver": "3.11",
             "local": False,

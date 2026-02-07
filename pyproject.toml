@@ -13,11 +13,10 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 packages = [
     { include = "nautobot_igp_models" },
@@ -28,9 +27,9 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.13"
+python = ">=3.10,<3.14"
 # Used for local development
-nautobot = "^2.0.0"
+nautobot = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
@@ -86,12 +85,12 @@ notes = """,
 
 [tool.pylint-nautobot]
 supported_nautobot_versions = [
-    "2.0.0"
+    "3.0.0"
 ]
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [
@@ -128,7 +127,29 @@ convention = "google"
 ]
 "nautobot_igp_models/tests/*" = [
     "D",
-    "S"
+    "S",
+    "F841",  # Allow unused variables in tests
+]
+"nautobot_igp_models/models.py" = [
+    "D105",  # Missing docstring in magic method (__str__)
+    "D106",  # Missing docstring in public nested class (Meta)
+]
+"nautobot_igp_models/forms.py" = [
+    "D101",  # Missing docstring in public class
+    "D105",  # Missing docstring in magic method
+    "D106",  # Missing docstring in public nested class (Meta)
+    "D107",  # Missing docstring in __init__
+]
+"nautobot_igp_models/filters.py" = [
+    "D101",  # Missing docstring in public class
+    "D102",  # Missing docstring in public method
+    "D106",  # Missing docstring in public nested class (Meta)
+]
+"nautobot_igp_models/tables.py" = [
+    "D106",  # Missing docstring in public nested class (Meta)
+]
+"nautobot_igp_models/management/commands/*" = [
+    "S104",  # Possible binding to all interfaces (acceptable in demo data)
 ]
 
 [build-system]

@@ -1,15 +1,5 @@
 # Nautobot IGP Models
 
-<!--
-Developer Note - Remove Me!
-
-The README will have certain links/images broken until the PR is merged into `develop`. Update the GitHub links with whichever branch you're using (main etc.) if different.
-
-The logo of the project is a placeholder (docs/images/icon-nautobot-igp-models.png) - please replace it with your app icon, making sure it's at least 200x200px and has a transparent background!
-
-To avoid extra work and temporary links, make sure that publishing docs (or merging a PR) is done at the same time as setting up the docs site on RTD, then test everything.
--->
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/byrn-baker/nautobot-app-igp-models/develop/docs/images/icon-nautobot-igp-models.png" class="logo" height="200px">
   <br>
@@ -23,25 +13,53 @@ To avoid extra work and temporary links, make sure that publishing docs (or merg
 
 ## Overview
 
-> Developer Note: Add a long (2-3 paragraphs) description of what the App does, what problems it solves, what functionality it adds to Nautobot, what external systems it works with etc.
+The Nautobot IGP Models app extends Nautobot to provide comprehensive modeling and management of Interior Gateway Protocol (IGP) routing configurations. This app enables network engineers and automation teams to maintain a source of truth for ISIS and OSPF routing instances, process configurations, and interface-level routing parameters across their network infrastructure.
 
-### Screenshots
+With this app, you can model complete IGP topologies including routing instances per device, protocol-specific configurations (ISIS NET generation, OSPF process IDs), and granular interface settings (ISIS circuit types and metrics, OSPF areas and costs). The app provides full CRUD operations via both the Nautobot web UI and REST API, making it ideal for both manual network documentation and programmatic network automation workflows. Whether you're documenting existing IGP deployments, planning network migrations, or generating router configurations from structured data, the IGP Models app provides the data foundation you need.
 
-> Developer Note: Add any representative screenshots of the App in action. These images should also be added to the `docs/user/app_use_cases.md` section.
+The app integrates seamlessly with Nautobot's existing device and interface models, supports custom fields and relationships for extensibility, and includes comprehensive filtering and bulk editing capabilities. It also features intelligent defaults like automatic ISIS NET generation from router IDs and configurable status tracking for lifecycle management.
 
-> Developer Note: Place the files in the `docs/images/` folder and link them using only full URLs from GitHub, for example: `![Overview](https://raw.githubusercontent.com/byrn-baker/nautobot-app-igp-models/develop/docs/images/app-overview.png)`. This absolute static linking is required to ensure the README renders properly in GitHub, the docs site, and any other external sites like PyPI.
+### Key Features
 
-More screenshots can be found in the [Using the App](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/user/app_use_cases/) page in the documentation. Here's a quick overview of some of the app's added functionality:
+- **Multiple IGP Protocol Support**: Model both ISIS and OSPF configurations on the same or different devices
+- **Hierarchical Configuration**: Organize routing configs from device-level instances down to interface-specific parameters
+- **ISIS NET Auto-Generation**: Automatically generate valid ISIS Network Entity Titles (NETs) from router IDs and area identifiers
+- **Comprehensive Interface Configuration**: Track circuit types, metrics, areas, and costs at the interface level
+- **Full API Access**: Complete REST API for programmatic access and automation integration
+- **Status Lifecycle Management**: Track configuration states (Planned, Active, Decommissioned)
+- **Extensibility**: Leverage Nautobot's custom fields, relationships, and webhooks
+- **Demo Data**: Includes management command to load realistic network topology for testing
 
-![](https://raw.githubusercontent.com/byrn-baker/nautobot-app-igp-models/develop/docs/images/placeholder.png)
+### Supported Use Cases
+
+- Network documentation and source of truth for IGP routing configurations
+- Configuration generation for network automation tools (Ansible, Nornir, etc.)
+- Migration planning between routing protocols (ISIS to OSPF, vice versa)
+- Validation of routing design consistency across the network
+- Integration with monitoring systems for configuration drift detection
+
+More details can be found in the [Using the App](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/user/app_use_cases/) documentation.
 
 ## Try it out!
 
-> Developer Note: Only keep this section if appropriate. Update link to correct sandbox.
+This app can be tested in your local development environment using the included demo data:
 
-This App is installed in the Nautobot Community Sandbox found over at [demo.nautobot.com](https://demo.nautobot.com/)!
+```bash
+# Start development environment
+invoke build && invoke start
 
-> For a full list of all the available always-on sandbox environments, head over to the main page on [networktocode.com](https://www.networktocode.com/nautobot/sandbox-environments/).
+# Load demo data
+invoke nbshell
+# In the shell:
+from nautobot_igp_models.management.commands.load_igp_demo_data import Command
+Command().handle()
+exit()
+
+# Access Nautobot at http://localhost:8080
+# Navigate to: Routing → IGP - Link-State
+```
+
+The demo data creates a realistic 4-router network topology with ISIS and OSPF configurations for exploration and testing.
 
 ## Documentation
 

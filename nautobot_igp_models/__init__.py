@@ -2,6 +2,7 @@
 
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
+
 from django.db.models.signals import post_migrate
 from nautobot.apps import NautobotAppConfig
 
@@ -18,20 +19,34 @@ class NautobotIgpModelsConfig(NautobotAppConfig):
     description = "Nautobot IGP Models."
     base_url = "nautobot-igp-models"
     required_settings = []
-    min_version = "2.0.0"
-    max_version = "2.9999"
+    min_version = "3.0.0"
+    max_version = "3.9999"
     default_settings = {
         "default_statuses": {
             "IGPRoutingInstance": ["Planned", "Active", "Decommissioned"],
             "ISISConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],
-            "ISISInterfaceConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],
+            "ISISInterfaceConfiguration": [
+                "Active",
+                "Decommissioned",
+                "Deprovisioning",
+                "Offline",
+                "Planned",
+                "Provisioning",
+            ],
             "OSPFConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],
-            "OSPFInterfaceConfiguration": ["Active", "Decommissioned", "Deprovisioning", "Offline", "Planned", "Provisioning"],
+            "OSPFInterfaceConfiguration": [
+                "Active",
+                "Decommissioned",
+                "Deprovisioning",
+                "Offline",
+                "Planned",
+                "Provisioning",
+            ],
         }
     }
     caching_config = {}
     docs_view_name = "plugins:nautobot_igp_models:docs"
-    
+
     def ready(self):
         """Callback invoked after the app is loaded."""
         super().ready()

@@ -1,7 +1,11 @@
 """Nautobot signal handler functions for nautobot_igp_models."""
 
+import logging
+
 from django.apps import apps as global_apps
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
 
 PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["nautobot_igp_models"]
 
@@ -23,7 +27,7 @@ def post_migrate_create_statuses(sender, *, apps=global_apps, **kwargs):
             try:
                 status = Status.objects.get(name=name)
             except Status.DoesNotExist:
-                print(f"nautobot_igp_models: Unable to find status: {name} .. SKIPPING")
+                logger.warning(f"Unable to find status: {name}, skipping")
                 continue
 
             if ct_model not in status.content_types.all():

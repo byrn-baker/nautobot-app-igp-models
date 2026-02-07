@@ -1,19 +1,33 @@
 """Forms for nautobot_igp_models."""
 
+import logging
+
 from django import forms
-from nautobot.apps.forms import NautobotBulkEditForm, NautobotFilterForm, NautobotModelForm, TagsBulkEditFormMixin, DynamicModelChoiceField, StaticSelect2
+from nautobot.apps.forms import (
+    DynamicModelChoiceField,
+    NautobotBulkEditForm,
+    NautobotFilterForm,
+    NautobotModelForm,
+    StaticSelect2,
+    TagsBulkEditFormMixin,
+)
 from nautobot.dcim.models import Device, Interface
-from nautobot.ipam.models import IPAddress, VRF
+from nautobot.ipam.models import VRF, IPAddress
+
 from nautobot_igp_models import models
+
+logger = logging.getLogger(__name__)
 
 
 class IGPRoutingInstanceForm(NautobotModelForm):  # pylint: disable=too-many-ancestors
     """IGPRoutingInstance creation/edit form."""
 
     device = DynamicModelChoiceField(queryset=Device.objects.all(), label="Device")
-    router_id = DynamicModelChoiceField(queryset=IPAddress.objects.all(), label="Router ID", query_params={"device_id": "$device"})
+    router_id = DynamicModelChoiceField(
+        queryset=IPAddress.objects.all(), label="Router ID", query_params={"device_id": "$device"}
+    )
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
-    
+
     class Meta:
         """Meta attributes."""
 
@@ -22,7 +36,7 @@ class IGPRoutingInstanceForm(NautobotModelForm):  # pylint: disable=too-many-anc
         widgets = {
             "protocol": StaticSelect2(),
         }
-        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Make isis_area required only if protocol is ISIS
@@ -32,6 +46,7 @@ class IGPRoutingInstanceForm(NautobotModelForm):  # pylint: disable=too-many-anc
             self.fields["isis_area"].required = True
         else:
             self.fields["isis_area"].required = False
+
 
 class IGPRoutingInstanceBulkEditForm(TagsBulkEditFormMixin, NautobotBulkEditForm):  # pylint: disable=too-many-ancestors
     """IGPRoutingInstance bulk edit form."""
@@ -43,18 +58,16 @@ class IGPRoutingInstanceBulkEditForm(TagsBulkEditFormMixin, NautobotBulkEditForm
     protocol = forms.ChoiceField(
         choices=models.IGPRoutingInstance._meta.get_field("protocol").choices, required=False, widget=StaticSelect2()
     )
-    router_id = DynamicModelChoiceField(queryset=IPAddress.objects.all(), required=False, label="Router ID", query_params={"device_id": "$device"})
+    router_id = DynamicModelChoiceField(
+        queryset=IPAddress.objects.all(), required=False, label="Router ID", query_params={"device_id": "$device"}
+    )
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
     isis_area = forms.CharField(required=False, label="ISIS Area")
 
     class Meta:
         """Meta attributes."""
 
-        nullable_fields = [
-            "description",
-            "vrf", 
-            "isis_area"
-        ]
+        nullable_fields = ["description", "vrf", "isis_area"]
 
 
 class IGPRoutingInstanceFilterForm(NautobotFilterForm):
@@ -69,6 +82,7 @@ class IGPRoutingInstanceFilterForm(NautobotFilterForm):
         help_text="Search within Name or Slug.",
     )
     name = forms.CharField(required=False, label="Name")
+
 
 # ISISConfiguration Forms
 class ISISConfigurationForm(NautobotModelForm):
@@ -90,91 +104,91 @@ class ISISConfigurationForm(NautobotModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        print("=== Initializing ISISConfigurationForm ===")
-        print("Self.instance (ISISConfiguration):", self.instance)
-        print("Form data:", self.data)
+        logger.debug("Initializing ISISConfigurationForm")
+        logger.debug(f"Self.instance (ISISConfiguration): {self.instance}")
+        logger.debug(f"Form data: {self.data}")
 
         suggested_net = None
         selected_instance = None
 
-        if self.instance and self.instance.pk and hasattr(self.instance, 'instance'):
+        if self.instance and self.instance.pk and hasattr(self.instance, "instance"):
             try:
                 selected_instance = self.instance.instance
-                print("Selected instance from self.instance:", selected_instance)
+                logger.debug(f"Selected instance from self.instance: {selected_instance}")
             except models.IGPRoutingInstance.DoesNotExist:
-                print("No related IGPRoutingInstance found on self.instance")
+                logger.debug("No related IGPRoutingInstance found on self.instance")
                 selected_instance = None
 
         if not selected_instance and "instance" in self.data:
             instance_id = self.data.get("instance")
-            print("Instance ID from form data:", instance_id)
+            logger.debug(f"Instance ID from form data: {instance_id}")
             if instance_id:
                 try:
                     selected_instance = models.IGPRoutingInstance.objects.get(pk=instance_id)
-                    print("Selected instance from form data:", selected_instance)
+                    logger.debug(f"Selected instance from form data: {selected_instance}")
                 except (ValueError, models.IGPRoutingInstance.DoesNotExist):
-                    print("Failed to retrieve IGPRoutingInstance with ID:", instance_id)
+                    logger.debug(f"Failed to retrieve IGPRoutingInstance with ID: {instance_id}")
                     selected_instance = None
 
         if selected_instance:
-            router_id = getattr(selected_instance, 'router_id', None)
-            isis_area = getattr(selected_instance, 'isis_area', None)
-            print("Router ID:", router_id)
-            print("Router ID string representation:", str(router_id) if router_id else None)
-            print("ISIS Area:", isis_area)
+            router_id = getattr(selected_instance, "router_id", None)
+            isis_area = getattr(selected_instance, "isis_area", None)
+            logger.debug(f"Router ID: {router_id}")
+            logger.debug(f"Router ID string representation: {str(router_id) if router_id else None}")
+            logger.debug(f"ISIS Area: {isis_area}")
 
             if router_id and isis_area:
                 try:
                     suggested_net = self.generate_full_net(router_id, isis_area)
-                    print("Generated full NET suggestion:", suggested_net)
+                    logger.debug(f"Generated full NET suggestion: {suggested_net}")
                 except ValueError as e:
-                    print("Error generating NET suggestion:", str(e))
+                    logger.debug(f"Error generating NET suggestion: {str(e)}")
                     suggested_net = None
             else:
-                print("Cannot generate NET suggestion: router_id or isis_area missing")
+                logger.debug("Cannot generate NET suggestion: router_id or isis_area missing")
         else:
-            print("No selected instance available to generate NET suggestion")
+            logger.debug("No selected instance available to generate NET suggestion")
 
         if suggested_net:
             self.fields["system_id"].help_text = (
                 "Enter the full NET in the format AA.BBBB.XXXX.XXXX.XXXX.CC (e.g., 49.0001.0192.0168.0302.00). "
                 f"Suggested NET: {suggested_net}"
             )
-            print("Updated help text with NET suggestion:", self.fields["system_id"].help_text)
+            logger.debug(f"Updated help text with NET suggestion: {self.fields['system_id'].help_text}")
         else:
             self.fields["system_id"].help_text = (
                 "Enter the full NET in the format AA.BBBB.XXXX.XXXX.XXXX.CC (e.g., 49.0001.0192.0168.0302.00). "
                 "Select an IGP Instance with a Router ID and ISIS Area to see a suggested NET."
             )
-            print("Set default help text:", self.fields["system_id"].help_text)
+            logger.debug(f"Set default help text: {self.fields['system_id'].help_text}")
 
     def generate_full_net(self, router_id, isis_area):
+        """Generate the full NET (Area ID + System ID + NSEL).
+
+        Based on router_id and isis_area. Returns a string in the format 'AA.BBBB.XXXX.XXXX.XXXX.CC'.
         """
-        Generate the full NET (Area ID + System ID + NSEL) based on router_id and isis_area.
-        Returns a string in the format 'AA.BBBB.XXXX.XXXX.XXXX.CC'.
-        """
-        print("Generating full NET with router_id:", router_id, "isis_area:", isis_area)
+        logger.debug(f"Generating full NET with router_id: {router_id}, isis_area: {isis_area}")
 
         # Step 1: Get the Area Identifier (e.g., "49.0001")
         area_id = isis_area  # Use the isis_area directly (e.g., "49.0001")
-        print("Area Identifier:", area_id)
+        logger.debug(f"Area Identifier: {area_id}")
 
         # Step 2: Generate the System ID based on router_id
         router_id_str = str(router_id)  # e.g., "192.168.3.2/24"
-        print("Router ID string representation:", router_id_str)
+        logger.debug(f"Router ID string representation: {router_id_str}")
 
         # Strip the subnet mask (e.g., "/24") if present
         ip_address = router_id_str.split("/")[0]  # Gets "192.168.3.2"
-        print("IP address after stripping subnet:", ip_address)
+        logger.debug(f"IP address after stripping subnet: {ip_address}")
 
         # Split the IP address into octets
         octets = ip_address.split(".")
         if len(octets) != 4:
             raise ValueError("Router ID format invalid; expected IPv4 address.")
-        
+
         # Convert octets to integers
         octet_values = [int(octet) for octet in octets]
-        print("Octet values:", octet_values)
+        logger.debug(f"Octet values: {octet_values}")
 
         # Map octets to three 4-digit segments for System ID
         # First segment: First octet (e.g., 192 -> 0192)
@@ -184,7 +198,7 @@ class ISISConfigurationForm(NautobotModelForm):
         # Third segment: Third and fourth octets (e.g., 3, 2 -> 0302)
         third_segment = f"{octet_values[2]:02d}{octet_values[3]:02d}"[-4:]  # e.g., "0302"
 
-        print("System ID segments:", first_segment, second_segment, third_segment)
+        logger.debug(f"System ID segments: {first_segment}, {second_segment}, {third_segment}")
 
         # Combine System ID
         system_id = f"{first_segment}.{second_segment}.{third_segment}"
@@ -193,6 +207,7 @@ class ISISConfigurationForm(NautobotModelForm):
         nsel = "00"  # Fixed NSEL for IS-IS routing
         full_net = f"{area_id}.{system_id}.{nsel}"
         return full_net
+
 
 class ISISConfigurationFilterForm(NautobotFilterForm):
     """Form for filtering ISISConfiguration objects."""
@@ -214,84 +229,122 @@ class ISISConfigurationBulkEditForm(NautobotBulkEditForm):
     class Meta:
         nullable_fields = ()
 
+
+# ISISInterfaceConfiguration Forms
 class ISISInterfaceConfigurationForm(NautobotModelForm):
     isis_config = DynamicModelChoiceField(
         queryset=models.ISISConfiguration.objects.all(),
-        label="ISIS Configuration"
+        label="ISIS Configuration",
+        required=True,
     )
+
+    device = DynamicModelChoiceField(
+        queryset=Device.objects.all(),
+        label="Device",
+        required=True,
+    )
+
     interface = DynamicModelChoiceField(
-        queryset=models.Interface.objects.all(),
+        queryset=Interface.objects.none(),
         label="Interface",
-        query_params={"device_id": "$isis_config__instance__device"}
+        required=True,
+        to_field_name="id",
+        query_params={"device_id": "$device"},
     )
 
     class Meta:
         model = models.ISISInterfaceConfiguration
-        fields = ("isis_config", "interface", "circuit_type", "metric", "status")
+        fields = ("name", "isis_config", "device", "interface", "circuit_type", "metric", "status")
         widgets = {"circuit_type": StaticSelect2()}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        device = None
+
+        # If editing an existing ISISInterfaceConfiguration
+        if self.instance and self.instance.pk and hasattr(self.instance, "device") and self.instance.device:
+            device = self.instance.device
+
+        # If creating a new configuration, get the device from form data
+        elif "device" in self.data:
+            try:
+                device_id = int(self.data.get("device"))
+                device = Device.objects.get(pk=device_id)
+            except (ValueError, Device.DoesNotExist):
+                pass  # Keep device as None
+
+        # Ensure queryset for interface is properly set
+        if device:
+            self.fields["interface"].queryset = Interface.objects.filter(device=device)
+        else:
+            self.fields["interface"].queryset = Interface.objects.none()  # Prevents form error
+
 
 class ISISInterfaceConfigurationFilterForm(NautobotFilterForm):
     model = models.ISISInterfaceConfiguration
+
     isis_config = DynamicModelChoiceField(
         queryset=models.ISISConfiguration.objects.all(),
         required=False,
-        label="ISIS Configuration"
-    )
-    interface = DynamicModelChoiceField(
-        queryset=models.Interface.objects.all(),
-        required=False,
-        label="Interface",
-        query_params={"device_id": "$isis_config__instance__device"}
-    )
-    circuit_type = forms.ChoiceField(
-        choices=models.ISISInterfaceConfiguration._meta.get_field("circuit_type").choices,
-        required=False,
-        widget=StaticSelect2(),
-        label="Circuit Type"
-    )
-    metric = forms.IntegerField(
-        required=False,
-        label="Metric"
+        label="ISIS Configuration",
+        to_field_name="name",
     )
 
-class ISISInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
-    isis_config = DynamicModelChoiceField(
-        queryset=models.ISISConfiguration.objects.all(),
-        required=False,
-        label="ISIS Configuration"
-    )
     interface = DynamicModelChoiceField(
-        queryset=models.Interface.objects.all(),
+        queryset=Interface.objects.all(),
         required=False,
         label="Interface",
-        query_params={"device_id": "$isis_config__instance__device"}
+        query_params={"device_id": "$isis_config__instance__device"},
     )
-    circuit_type = forms.ChoiceField(
+
+    circuit_type = forms.MultipleChoiceField(
         choices=models.ISISInterfaceConfiguration._meta.get_field("circuit_type").choices,
         required=False,
-        widget=StaticSelect2(),
-        label="Circuit Type"
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
     )
+
     metric = forms.IntegerField(
-        required=False,
-        label="Metric"
+        required=False, label="Metric", widget=forms.NumberInput(attrs={"class": "form-control"})
     )
 
     class Meta:
+        fields = ["isis_config_name", "interface", "circuit_type", "metric", "status"]
+
+
+class ISISInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
+    isis_config = DynamicModelChoiceField(
+        queryset=models.ISISConfiguration.objects.all(), required=False, label="ISIS Configuration"
+    )
+    interface = DynamicModelChoiceField(
+        queryset=models.Interface.objects.all(),
+        required=False,
+        label="Interface",
+        query_params={"device_id": "$isis_config__instance__device"},
+    )
+    circuit_type = forms.ChoiceField(
+        choices=models.ISISInterfaceConfiguration._meta.get_field("circuit_type").choices,
+        required=False,
+        widget=StaticSelect2(),
+        label="Circuit Type",
+    )
+    metric = forms.IntegerField(required=False, label="Metric")
+
+    class Meta:
         nullable_fields = ("metric", "status")
+
 
 # OSPFConfiguration Forms
 class OSPFConfigurationForm(NautobotModelForm):
     """Form for creating and editing OSPFConfiguration objects."""
 
     instance = DynamicModelChoiceField(
-        queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"), 
-        label="IGP Instance"
+        queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"), label="IGP Instance"
     )
 
     class Meta:
         model = models.OSPFConfiguration
-        fields = ("instance", "process_id", "status")
+        fields = ("name", "instance", "process_id", "status")
 
 
 class OSPFConfigurationFilterForm(NautobotFilterForm):
@@ -312,65 +365,53 @@ class OSPFConfigurationBulkEditForm(NautobotBulkEditForm):
     )
     process_id = forms.IntegerField(required=False, label="Process ID")
 
+    class Meta:
+        nullable_fields = ()
+
+
+# OSPFInterfaceConfiguration Forms
 class OSPFInterfaceConfigurationForm(NautobotModelForm):
-    ospf_config = DynamicModelChoiceField(
-        queryset=models.OSPFConfiguration.objects.all(),
-        label="OSPF Configuration"
-    )
+    ospf_config = DynamicModelChoiceField(queryset=models.OSPFConfiguration.objects.all(), label="OSPF Configuration")
     interface = DynamicModelChoiceField(
-        queryset=Interface.objects.all(),
+        queryset=models.Interface.objects.all(),
         label="Interface",
-        query_params={"device_id": "$ospf_config__instance__device"}
+        query_params={"device_id": "$ospf_config__instance__device"},
     )
-    area = forms.CharField(label="Area")
-    cost = forms.IntegerField(label="Cost")
+    area = forms.CharField(required=False, label="Area")
+    cost = forms.IntegerField(required=False, label="Cost")
 
     class Meta:
         model = models.OSPFInterfaceConfiguration
-        fields = ("ospf_config", "interface", "area", "cost", "status")
+        fields = ("name", "ospf_config", "interface", "area", "cost", "status")
+
 
 class OSPFInterfaceConfigurationFilterForm(NautobotFilterForm):
     model = models.OSPFInterfaceConfiguration
     ospf_config = DynamicModelChoiceField(
-        queryset=models.OSPFConfiguration.objects.all(),
-        required=False,
-        label="OSPF Configuration"
+        queryset=models.OSPFConfiguration.objects.all(), required=False, label="OSPF Configuration"
     )
     interface = DynamicModelChoiceField(
         queryset=models.Interface.objects.all(),
         required=False,
         label="Interface",
-        query_params={"device_id": "$ospf_config__instance__device"}
+        query_params={"device_id": "$ospf_config__instance__device"},
     )
-    area = forms.CharField(
-        required=False,
-        label="Area"
-    )
-    cost = forms.IntegerField(
-        required=False,
-        label="Cost"
-    )
+    area = forms.CharField(required=False, label="Area")
+    cost = forms.IntegerField(required=False, label="Cost")
 
 
 class OSPFInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
     ospf_config = DynamicModelChoiceField(
-        queryset=models.OSPFConfiguration.objects.all(),
-        required=False,
-        label="OSPF Configuration"
+        queryset=models.OSPFConfiguration.objects.all(), required=False, label="OSPF Configuration"
     )
     interface = DynamicModelChoiceField(
         queryset=models.Interface.objects.all(),
         required=False,
         label="Interface",
-        query_params={"device_id": "$ospf_config__instance__device"}
+        query_params={"device_id": "$ospf_config__instance__device"},
     )
-    area = forms.CharField(
-        required=False,
-        label="Area"
-    )
-    cost = forms.IntegerField(
-        required=False,
-        label="Cost"
-    )
+    area = forms.CharField(required=False, label="Area")
+    cost = forms.IntegerField(required=False, label="Cost")
+
     class Meta:
         nullable_fields = ("area", "cost", "status")
