@@ -336,9 +336,10 @@ interface4.metric = 50  # Override preserved
 - ✅ API automatically includes new fields
 
 ### Templates & Tools:
-- ✅ 3 Jinja2 configuration templates
-- ✅ 1 management command (analyze_igp_defaults)
-- ✅ 2 JSON Schema files for config context validation
+- ✅ 3 Jinja2 configuration templates (auto-loaded as export templates)
+- ✅ 2 management commands (analyze_igp_defaults, load_igp_resources)
+- ✅ 2 JSON Schema files for config context validation (auto-loaded)
+- ✅ Automatic resource loading via post-migrate signal
 - ✅ Template usage documentation
 
 ### Documentation:

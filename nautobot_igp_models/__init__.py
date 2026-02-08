@@ -53,9 +53,11 @@ class NautobotIgpModelsConfig(NautobotAppConfig):
 
         from .signals import (  # pylint: disable=import-outside-toplevel
             post_migrate_create_statuses,
+            post_migrate_load_resources,
         )
 
         post_migrate.connect(post_migrate_create_statuses, sender=self)
+        post_migrate.connect(post_migrate_load_resources, sender=self)
 
 
 config = NautobotIgpModelsConfig  # pylint:disable=invalid-name

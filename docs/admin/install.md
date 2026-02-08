@@ -88,3 +88,53 @@ PLUGINS_CONFIG = {
 
 !!! note
     If the statuses don't already exist in your Nautobot instance, they will be created automatically during migration.
+
+## Automatic Resource Loading
+
+During `nautobot-server post_upgrade`, the app automatically loads:
+
+### Config Context Schemas
+
+Two JSON Schema files for validating config context:
+- **IGP ISIS Configuration** (`igp-isis-configuration`) - Validates ISIS config context parameters
+- **IGP OSPF Configuration** (`igp-ospf-configuration`) - Validates OSPF config context parameters
+
+Access these schemas at: **Extensibility > Config Context Schemas**
+
+### Export Templates
+
+Configuration templates for generating device configurations:
+- **ISIS Configuration (Cisco IOS)** - For `ISISConfiguration` model
+- **ISIS Configuration (Juniper JunOS)** - For `ISISConfiguration` model
+- **OSPF Configuration (Cisco IOS)** - For `OSPFConfiguration` model
+
+Export templates appear in the "Export" button dropdown on object detail pages.
+
+### Manual Resource Loading
+
+To manually load or update these resources:
+
+```bash
+# Load resources (skip existing)
+nautobot-server load_igp_resources
+
+# Force update existing resources
+nautobot-server load_igp_resources --force
+```
+
+### Skip Automatic Loading
+
+To skip automatic resource loading during migration (e.g., for testing):
+
+```bash
+export NAUTOBOT_SKIP_RESOURCE_LOADING=1
+nautobot-server post_upgrade
+```
+
+!!! tip "Verifying Installation"
+    After installation, verify that export templates are loaded:
+
+    1. Navigate to **Extensibility > Export Templates**
+    2. Filter by "IGP" to see the installed templates
+    3. Create an ISIS or OSPF configuration
+    4. On the detail page, click the "Export" button to see available templates
