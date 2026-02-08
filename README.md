@@ -1,7 +1,7 @@
 # Nautobot IGP Models
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/byrn-baker/nautobot-app-igp-models/develop/docs/images/icon-nautobot-igp-models.png" class="logo" height="200px">
+  <img src="https://raw.githubusercontent.com/byrn-baker/nautobot-app-igp-models/develop/docs/images/icon-nautobot-igp-models-alt.png" class="logo" height="200px">
   <br>
   <a href="https://github.com/byrn-baker/nautobot-app-igp-models/actions"><img src="https://github.com/byrn-baker/nautobot-app-igp-models/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <a href="https://nautobot-app-igp-models.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/nautobot-igp-models/badge/"></a>
