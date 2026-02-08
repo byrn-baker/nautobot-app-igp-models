@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/nautobot/nautobot-app-igp-models/schemas/config_context_ospf.json",
+  "title": "OSPF IGP Config Context Schema",
+  "description": "JSON Schema for OSPF configuration parameters in Nautobot config context",
+  "type": "object",
+  "properties": {
+    "igp": {
+      "type": "object",
+      "properties": {
+        "ospf": {
+          "type": "object",
+          "properties": {
+            "hello_interval": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Hello interval in seconds (overrides database default)"
+            },
+            "dead_interval": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Dead interval in seconds (overrides database default)"
+            },
+            "priority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 255,
+              "description": "Router priority for DR/BDR election"
+            },
+            "network_type": {
+              "type": "string",
+              "enum": ["broadcast", "point-to-point", "point-to-multipoint", "non-broadcast"],
+              "description": "OSPF network type"
+            },
+            "authentication": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["simple", "md5", "null"],
+                  "description": "Authentication type"
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Authentication key or secret reference (e.g., {{ secrets.ospf_key }})"
+                },
+                "key_id": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 255,
+                  "description": "MD5 key ID"
+                }
+              },
+              "required": ["type"],
+              "description": "OSPF authentication configuration"
+            },
+            "cisco": {
+              "type": "object",
+              "properties": {
+                "bfd": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable BFD for OSPF"
+                    },
+                    "interval": {
+                      "type": "integer",
+                      "minimum": 50,
+                      "maximum": 999,
+                      "description": "BFD interval in milliseconds"
+                    },
+                    "min_rx": {
+                      "type": "integer",
+                      "minimum": 50,
+                      "maximum": 999,
+                      "description": "BFD minimum receive interval in milliseconds"
+                    },
+                    "multiplier": {
+                      "type": "integer",
+                      "minimum": 3,
+                      "maximum": 50,
+                      "description": "BFD multiplier"
+                    }
+                  },
+                  "description": "Cisco BFD configuration"
+                },
+                "mpls_traffic_eng": {
+                  "type": "boolean",
+                  "description": "Enable MPLS Traffic Engineering"
+                },
+                "fast_reroute": {
+                  "type": "object",
+                  "properties": {
+                    "per_prefix": {
+                      "type": "boolean",
+                      "description": "Enable per-prefix FRR"
+                    }
+                  },
+                  "description": "Fast reroute (FRR) configuration"
+                },
+                "mtu_ignore": {
+                  "type": "boolean",
+                  "description": "Ignore MTU mismatch"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive (no hello packets)"
+                },
+                "demand_circuit": {
+                  "type": "boolean",
+                  "description": "Treat interface as demand circuit"
+                },
+                "prefix_suppression": {
+                  "type": "boolean",
+                  "description": "Suppress prefix advertisements"
+                }
+              },
+              "description": "Cisco IOS/IOS-XE specific OSPF settings"
+            },
+            "juniper": {
+              "type": "object",
+              "properties": {
+                "bfd_liveness_detection": {
+                  "type": "object",
+                  "properties": {
+                    "minimum_interval": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 255000,
+                      "description": "BFD minimum interval in milliseconds"
+                    },
+                    "multiplier": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 255,
+                      "description": "BFD detection time multiplier"
+                    },
+                    "minimum_receive_interval": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 255000,
+                      "description": "Minimum receive interval in milliseconds"
+                    }
+                  },
+                  "description": "Juniper BFD liveness detection"
+                },
+                "link_protection": {
+                  "type": "boolean",
+                  "description": "Enable link protection (FRR)"
+                },
+                "node_link_protection": {
+                  "type": "boolean",
+                  "description": "Enable node and link protection"
+                },
+                "reference_bandwidth": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(k|m|g)?$",
+                  "description": "Reference bandwidth for metric calculation (e.g., '100g')"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive"
+                },
+                "demand_circuit": {
+                  "type": "boolean",
+                  "description": "Treat interface as demand circuit"
+                },
+                "flood_reduction": {
+                  "type": "boolean",
+                  "description": "Enable flood reduction"
+                }
+              },
+              "description": "Juniper JunOS specific OSPF settings"
+            },
+            "arista": {
+              "type": "object",
+              "properties": {
+                "bfd": {
+                  "type": "boolean",
+                  "description": "Enable BFD"
+                },
+                "segment_routing": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable segment routing"
+                    },
+                    "prefix_sid_index": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 65535,
+                      "description": "Prefix SID index"
+                    }
+                  },
+                  "description": "Segment routing configuration"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive"
+                }
+              },
+              "description": "Arista EOS specific OSPF settings"
+            },
+            "nokia": {
+              "type": "object",
+              "properties": {
+                "bfd": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable BFD"
+                    },
+                    "interval": {
+                      "type": "integer",
+                      "minimum": 10,
+                      "maximum": 100000,
+                      "description": "BFD interval in milliseconds"
+                    },
+                    "multiplier": {
+                      "type": "integer",
+                      "minimum": 2,
+                      "maximum": 20,
+                      "description": "BFD multiplier"
+                    }
+                  },
+                  "description": "Nokia SR OS BFD configuration"
+                },
+                "ldp_sync": {
+                  "type": "boolean",
+                  "description": "Enable LDP IGP synchronization"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive"
+                }
+              },
+              "description": "Nokia SR OS specific OSPF settings"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "igp": {
+        "ospf": {
+          "hello_interval": 5,
+          "dead_interval": 20,
+          "authentication": {
+            "type": "md5",
+            "key": "{{ secrets.ospf_key }}",
+            "key_id": 1
+          },
+          "cisco": {
+            "bfd": {
+              "enabled": true,
+              "interval": 50
+            },
+            "mpls_traffic_eng": true
+          }
+        }
+      }
+    },
+    {
+      "igp": {
+        "ospf": {
+          "hello_interval": 1,
+          "dead_interval": 3,
+          "network_type": "point-to-point",
+          "juniper": {
+            "bfd_liveness_detection": {
+              "minimum_interval": 300,
+              "multiplier": 3
+            },
+            "link_protection": true
+          }
+        }
+      }
+    },
+    {
+      "igp": {
+        "ospf": {
+          "hello_interval": 30,
+          "dead_interval": 120,
+          "cisco": {
+            "bfd": {
+              "interval": 300
+            },
+            "mtu_ignore": true
+          }
+        }
+      }
+    }
+  ]
+}

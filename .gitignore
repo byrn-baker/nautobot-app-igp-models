@@ -307,3 +307,6 @@ public
 /compose.yaml
 /dump.sql
 /nautobot_igp_models/static/nautobot_igp_models/docs
+
+# Test outputs
+test_output*.txt

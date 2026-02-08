@@ -301,6 +301,21 @@ interface GigabitEthernet0/0/1
 
 ## Config Context Schema
 
+### JSON Schema Validation
+
+The app provides JSON Schema files for validating config context structure:
+
+- **ISIS:** [nautobot_igp_models/schemas/config_context_isis.json](../../nautobot_igp_models/schemas/config_context_isis.json)
+- **OSPF:** [nautobot_igp_models/schemas/config_context_ospf.json](../../nautobot_igp_models/schemas/config_context_ospf.json)
+- **Documentation:** [schemas/README.md](../../nautobot_igp_models/schemas/README.md)
+
+These schemas provide:
+- Type validation (integers, booleans, strings)
+- Range constraints (e.g., hello_interval: 1-65535)
+- Enum validation (e.g., authentication types)
+- Vendor-specific parameter definitions
+- Multiple examples for each use case
+
 ### Recommended Structure
 
 ```json
@@ -346,7 +361,7 @@ interface GigabitEthernet0/0/1
 
             // Authentication
             "authentication": {
-                "type": "message-digest",
+                "type": "md5",
                 "key_id": 1,
                 "key": "{{ secrets.ospf_auth_key }}"
             },
@@ -356,11 +371,42 @@ interface GigabitEthernet0/0/1
                 "bfd": {
                     "enabled": true
                 },
-                "fast_reroute": "per-prefix"
+                "fast_reroute": {
+                    "per_prefix": true
+                }
             }
         }
     }
 }
+```
+
+### Validating Config Context
+
+Use the JSON schemas to validate your config context:
+
+```python
+import json
+from jsonschema import validate, ValidationError
+
+# Load schema
+with open('nautobot_igp_models/schemas/config_context_isis.json') as f:
+    schema = json.load(f)
+
+# Validate config context
+config_context = {
+    "igp": {
+        "isis": {
+            "hello_interval": 5,
+            "cisco": {"bfd": {"enabled": True}}
+        }
+    }
+}
+
+try:
+    validate(instance=config_context, schema=schema)
+    print("✓ Valid config context")
+except ValidationError as e:
+    print(f"✗ Validation error: {e.message}")
 ```
 
 ## API Usage

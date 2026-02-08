@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/nautobot/nautobot-app-igp-models/schemas/config_context_isis.json",
+  "title": "ISIS IGP Config Context Schema",
+  "description": "JSON Schema for ISIS configuration parameters in Nautobot config context",
+  "type": "object",
+  "properties": {
+    "igp": {
+      "type": "object",
+      "properties": {
+        "isis": {
+          "type": "object",
+          "properties": {
+            "hello_interval": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "Hello interval in seconds (overrides database default)"
+            },
+            "hello_multiplier": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 100,
+              "description": "Hello multiplier for dead interval calculation"
+            },
+            "priority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 127,
+              "description": "DIS priority (0-127)"
+            },
+            "authentication": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["simple", "md5", "hmac-sha-1", "hmac-sha-256"],
+                  "description": "Authentication type"
+                },
+                "level": {
+                  "type": "string",
+                  "enum": ["level-1", "level-2", "both"],
+                  "description": "Authentication level"
+                },
+                "key": {
+                  "type": "string",
+                  "description": "Authentication key or secret reference (e.g., {{ secrets.isis_key }})"
+                },
+                "key_chain": {
+                  "type": "string",
+                  "description": "Key chain name for authentication"
+                },
+                "key_id": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 255,
+                  "description": "Key ID for authentication"
+                }
+              },
+              "required": ["type"],
+              "description": "ISIS authentication configuration"
+            },
+            "cisco": {
+              "type": "object",
+              "properties": {
+                "bfd": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable BFD for ISIS"
+                    },
+                    "interval": {
+                      "type": "integer",
+                      "minimum": 50,
+                      "maximum": 999,
+                      "description": "BFD interval in milliseconds"
+                    },
+                    "min_rx": {
+                      "type": "integer",
+                      "minimum": 50,
+                      "maximum": 999,
+                      "description": "BFD minimum receive interval in milliseconds"
+                    },
+                    "multiplier": {
+                      "type": "integer",
+                      "minimum": 3,
+                      "maximum": 50,
+                      "description": "BFD multiplier"
+                    }
+                  },
+                  "description": "Cisco BFD configuration"
+                },
+                "mpls_traffic_eng": {
+                  "type": "boolean",
+                  "description": "Enable MPLS Traffic Engineering"
+                },
+                "metric_style": {
+                  "type": "string",
+                  "enum": ["narrow", "wide", "transition"],
+                  "description": "ISIS metric style"
+                },
+                "log_adjacency_changes": {
+                  "type": "boolean",
+                  "description": "Log adjacency changes"
+                },
+                "fast_reroute": {
+                  "type": "object",
+                  "properties": {
+                    "per_prefix": {
+                      "type": "boolean",
+                      "description": "Enable per-prefix FRR"
+                    },
+                    "level": {
+                      "type": "string",
+                      "enum": ["level-1", "level-2", "both"],
+                      "description": "FRR level"
+                    }
+                  },
+                  "description": "Fast reroute (FRR) configuration"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive (no hello packets)"
+                },
+                "tag": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 4294967295,
+                  "description": "ISIS route tag"
+                }
+              },
+              "description": "Cisco IOS/IOS-XE specific ISIS settings"
+            },
+            "juniper": {
+              "type": "object",
+              "properties": {
+                "bfd_liveness_detection": {
+                  "type": "object",
+                  "properties": {
+                    "minimum_interval": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 255000,
+                      "description": "BFD minimum interval in milliseconds"
+                    },
+                    "multiplier": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 255,
+                      "description": "BFD detection time multiplier"
+                    },
+                    "minimum_receive_interval": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 255000,
+                      "description": "Minimum receive interval in milliseconds"
+                    }
+                  },
+                  "description": "Juniper BFD liveness detection"
+                },
+                "link_protection": {
+                  "type": "boolean",
+                  "description": "Enable link protection (FRR)"
+                },
+                "node_link_protection": {
+                  "type": "boolean",
+                  "description": "Enable node and link protection"
+                },
+                "wide_metrics_only": {
+                  "type": "boolean",
+                  "description": "Use only wide metrics"
+                },
+                "reference_bandwidth": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(k|m|g)?$",
+                  "description": "Reference bandwidth for metric calculation (e.g., '100g')"
+                },
+                "ipv6": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable IPv6 ISIS"
+                    },
+                    "metric": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 16777215,
+                      "description": "IPv6 metric"
+                    }
+                  },
+                  "description": "IPv6 ISIS configuration"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive"
+                }
+              },
+              "description": "Juniper JunOS specific ISIS settings"
+            },
+            "arista": {
+              "type": "object",
+              "properties": {
+                "bfd": {
+                  "type": "boolean",
+                  "description": "Enable BFD"
+                },
+                "segment_routing": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable segment routing"
+                    },
+                    "prefix_sid_index": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 65535,
+                      "description": "Prefix SID index"
+                    }
+                  },
+                  "description": "Segment routing configuration"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive"
+                }
+              },
+              "description": "Arista EOS specific ISIS settings"
+            },
+            "nokia": {
+              "type": "object",
+              "properties": {
+                "bfd": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Enable BFD"
+                    },
+                    "interval": {
+                      "type": "integer",
+                      "minimum": 10,
+                      "maximum": 100000,
+                      "description": "BFD interval in milliseconds"
+                    },
+                    "multiplier": {
+                      "type": "integer",
+                      "minimum": 2,
+                      "maximum": 20,
+                      "description": "BFD multiplier"
+                    }
+                  },
+                  "description": "Nokia SR OS BFD configuration"
+                },
+                "ldp_sync": {
+                  "type": "boolean",
+                  "description": "Enable LDP IGP synchronization"
+                },
+                "passive": {
+                  "type": "boolean",
+                  "description": "Make interface passive"
+                }
+              },
+              "description": "Nokia SR OS specific ISIS settings"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true,
+  "examples": [
+    {
+      "igp": {
+        "isis": {
+          "hello_interval": 5,
+          "authentication": {
+            "type": "md5",
+            "level": "level-2",
+            "key": "{{ secrets.isis_key }}"
+          },
+          "cisco": {
+            "bfd": {
+              "enabled": true,
+              "interval": 50
+            },
+            "mpls_traffic_eng": true,
+            "metric_style": "wide"
+          }
+        }
+      }
+    },
+    {
+      "igp": {
+        "isis": {
+          "hello_interval": 1,
+          "hello_multiplier": 3,
+          "juniper": {
+            "bfd_liveness_detection": {
+              "minimum_interval": 300,
+              "multiplier": 3
+            },
+            "link_protection": true,
+            "wide_metrics_only": true
+          }
+        }
+      }
+    },
+    {
+      "igp": {
+        "isis": {
+          "hello_interval": 30,
+          "cisco": {
+            "bfd": {
+              "interval": 300
+            }
+          }
+        }
+      }
+    }
+  ]
+}

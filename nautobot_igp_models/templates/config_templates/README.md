@@ -253,8 +253,19 @@ To add a new vendor template:
 4. Document required config context structure
 5. Test with actual device configurations
 
+## Config Context Validation
+
+The app provides JSON Schema files for validating config context structure:
+
+- **ISIS Schema:** `../../schemas/config_context_isis.json`
+- **OSPF Schema:** `../../schemas/config_context_ospf.json`
+- **Schema Documentation:** `../../schemas/README.md`
+
+Use these schemas to validate your config context before applying it to devices.
+
 ## See Also
 
 - [Configuration Inheritance Documentation](../../../docs/user/configuration_inheritance.md)
+- [Config Context Schemas](../../schemas/README.md)
 - [App Usage Guide](../../../docs/user/app_use_cases.md)
 - [Jinja2 Documentation](https://jinja.palletsprojects.com/)

@@ -338,12 +338,14 @@ interface4.metric = 50  # Override preserved
 ### Templates & Tools:
 - ✅ 3 Jinja2 configuration templates
 - ✅ 1 management command (analyze_igp_defaults)
+- ✅ 2 JSON Schema files for config context validation
 - ✅ Template usage documentation
 
 ### Documentation:
 - ✅ 1 comprehensive user guide (40+ examples)
 - ✅ 1 architecture decision record
-- ✅ 3 README files with examples
+- ✅ 4 README files with examples (templates, schemas)
+- ✅ JSON Schema documentation with validation examples
 - ✅ Updated mkdocs navigation
 
 ### Commits:
@@ -382,6 +384,10 @@ Navigate to: Device > Config Context
     }
 }
 ```
+
+**Validate with JSON Schema:**
+- ISIS Schema: `nautobot_igp_models/schemas/config_context_isis.json`
+- OSPF Schema: `nautobot_igp_models/schemas/config_context_ospf.json`
 
 ### 3. Generate Configuration
 
