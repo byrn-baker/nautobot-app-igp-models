@@ -96,8 +96,8 @@ During `nautobot-server post_upgrade`, the app automatically loads:
 ### Config Context Schemas
 
 Two JSON Schema files for validating config context:
-- **IGP ISIS Configuration** (`igp-isis-configuration`) - Validates ISIS config context parameters
-- **IGP OSPF Configuration** (`igp-ospf-configuration`) - Validates OSPF config context parameters
+- **IGP ISIS Configuration** - Validates ISIS config context parameters
+- **IGP OSPF Configuration** - Validates OSPF config context parameters
 
 Access these schemas at: **Extensibility > Config Context Schemas**
 

@@ -35,11 +35,11 @@ nautobot-server migrate
 
 #### Config Context Schemas
 
-- **IGP ISIS Configuration** (`igp-isis-configuration`)
+- **IGP ISIS Configuration**
   - Validates ISIS config context structure
   - Located at: `nautobot_igp_models/schemas/config_context_isis.json`
 
-- **IGP OSPF Configuration** (`igp-ospf-configuration`)
+- **IGP OSPF Configuration**
   - Validates OSPF config context structure
   - Located at: `nautobot_igp_models/schemas/config_context_ospf.json`
 

@@ -56,13 +56,11 @@ class Command(BaseCommand):
         schemas = [
             {
                 "name": "IGP ISIS Configuration",
-                "slug": "igp-isis-configuration",
                 "description": "JSON Schema for ISIS config context parameters",
                 "file": "config_context_isis.json",
             },
             {
                 "name": "IGP OSPF Configuration",
-                "slug": "igp-ospf-configuration",
                 "description": "JSON Schema for OSPF config context parameters",
                 "file": "config_context_ospf.json",
             },
@@ -82,7 +80,7 @@ class Command(BaseCommand):
                 schema_data = json.load(f)
 
             # Check if schema exists
-            existing = ConfigContextSchema.objects.filter(slug=schema_def["slug"]).first()
+            existing = ConfigContextSchema.objects.filter(name=schema_def["name"]).first()
 
             if existing and not force:
                 self.stdout.write(
@@ -94,9 +92,8 @@ class Command(BaseCommand):
 
             # Create or update schema
             schema, created = ConfigContextSchema.objects.update_or_create(
-                slug=schema_def["slug"],
+                name=schema_def["name"],
                 defaults={
-                    "name": schema_def["name"],
                     "description": schema_def["description"],
                     "data_schema": schema_data,
                 },
