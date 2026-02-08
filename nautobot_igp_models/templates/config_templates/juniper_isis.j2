@@ -1,0 +1,62 @@
+{#
+  Juniper JunOS ISIS Configuration Template
+
+  Uses hybrid configuration inheritance:
+  - Database fields for core parameters (metric, circuit type)
+  - Config context for optional/vendor settings (BFD, link protection)
+
+  Variables expected:
+  - isis_config: ISISConfiguration object
+  - interfaces: List of ISISInterfaceConfiguration objects
+#}
+protocols {
+    isis {{ isis_config.name }} {
+        level 2 {
+{%- if isis_config.default_hello_interval %}
+            hello-interval {{ isis_config.default_hello_interval }};
+{%- endif %}
+{%- if isis_config.instance.device.config_context.igp.isis.authentication is defined %}
+{%- set auth = isis_config.instance.device.config_context.igp.isis.authentication %}
+            authentication-key "{{ auth.key }}";
+            authentication-type {{ auth.type }};
+{%- endif %}
+{%- if isis_config.instance.device.config_context.igp.isis.juniper.wide_metrics_only is defined %}
+            wide-metrics-only;
+{%- endif %}
+        }
+        net {{ isis_config.system_id }};
+{%- if isis_config.instance.device.config_context.igp.isis.juniper.reference_bandwidth is defined %}
+        reference-bandwidth {{ isis_config.instance.device.config_context.igp.isis.juniper.reference_bandwidth }};
+{%- endif %}
+{% for interface_config in interfaces %}
+{%- set effective = interface_config.get_effective_config() %}
+{%- set juniper_config = interface_config.get_vendor_config('juniper') %}
+        interface {{ interface_config.interface.name }}.0 {
+{%- if effective.circuit_type == 'L2' %}
+            point-to-point;
+{%- endif %}
+            level 2 {
+                metric {{ effective.metric }};
+{%- if effective.hello_interval is defined %}
+                hello-interval {{ effective.hello_interval }};
+{%- endif %}
+{%- if effective.priority is defined %}
+                priority {{ effective.priority }};
+{%- endif %}
+{%- if juniper_config.bfd_liveness_detection is defined %}
+                bfd-liveness-detection {
+                    minimum-interval {{ juniper_config.bfd_liveness_detection.minimum_interval }};
+                    multiplier {{ juniper_config.bfd_liveness_detection.multiplier }};
+                }
+{%- endif %}
+            }
+{%- if juniper_config.link_protection %}
+            link-protection;
+{%- endif %}
+{%- if juniper_config.ipv6 is defined %}
+            family inet6;
+{%- endif %}
+        }
+{% endfor %}
+    }
+}
