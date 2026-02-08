@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/byrn-baker/nautobot-app-igp-models/develop/docs/images/icon-nautobot-igp-models.png" class="logo" height="200px">
   <br>
   <a href="https://github.com/byrn-baker/nautobot-app-igp-models/actions"><img src="https://github.com/byrn-baker/nautobot-app-igp-models/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-  <a href="https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/"><img src="https://readthedocs.org/projects/nautobot-app-nautobot-igp-models/badge/"></a>
+  <a href="https://nautobot-igp-models.readthedocs.io/"><img src="https://readthedocs.org/projects/nautobot-igp-models/badge/"></a>
   <a href="https://pypi.org/project/nautobot-igp-models/"><img src="https://img.shields.io/pypi/v/nautobot-igp-models"></a>
   <a href="https://pypi.org/project/nautobot-igp-models/"><img src="https://img.shields.io/pypi/dm/nautobot-igp-models"></a>
   <br>
