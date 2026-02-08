@@ -127,6 +127,28 @@ class ISISConfiguration(PrimaryModel):
     system_id = models.CharField(max_length=50, blank=True)
     status = StatusField(null=True)
 
+    # Default values for interface inheritance (hybrid approach)
+    default_metric = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default ISIS metric for interfaces (overridable at interface level)",
+    )
+    default_hello_interval = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default hello interval in seconds (can be overridden by config context)",
+    )
+    default_hello_multiplier = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default hello multiplier (can be overridden by config context)",
+    )
+    default_priority = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default DIS priority (can be overridden by config context)",
+    )
+
     class Meta:
         unique_together = ["instance", "name"]
 
@@ -223,13 +245,100 @@ class ISISInterfaceConfiguration(PrimaryModel):
         default="L1L2",
         help_text="ISIS circuit type for this interface.",
     )
-    metric = models.PositiveIntegerField(default=10, help_text="ISIS metric for this interface.")
+    metric = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="ISIS metric for this interface. If not set, inherits from ISIS configuration default.",
+    )
     status = StatusField(null=True)
 
     class Meta:
         unique_together = ("isis_config", "interface")
         verbose_name = "ISIS Interface Configuration"
         verbose_name_plural = "ISIS Interface Configurations"
+
+    def get_effective_metric(self):
+        """Get effective metric with inheritance: interface > isis_config default > global default."""
+        if self.metric is not None:
+            return self.metric
+        if self.isis_config.default_metric is not None:
+            return self.isis_config.default_metric
+        return 10  # Global default for ISIS
+
+    def get_effective_config(self):
+        """
+        Get effective configuration with full inheritance chain.
+
+        Priority order (highest to lowest):
+        1. Interface-specific database fields
+        2. ISIS configuration defaults (database)
+        3. Device config context (flexible/optional settings)
+        4. Global protocol defaults
+
+        Returns:
+            dict: Complete effective configuration for this interface
+        """
+        # Start with global protocol defaults
+        config = {
+            "metric": 10,
+            "hello_interval": 10,
+            "hello_multiplier": 3,
+            "priority": 64,
+            "circuit_type": self.circuit_type,
+        }
+
+        # Layer 1: Device-level config context (organization-wide defaults)
+        if hasattr(self.device, "config_context") and self.device.config_context:
+            device_ctx = self.device.config_context.get("igp", {}).get("isis", {})
+            config.update({k: v for k, v in device_ctx.items() if v is not None})
+
+        # Layer 2: ISIS configuration defaults from database
+        if self.isis_config.default_metric is not None:
+            config["metric"] = self.isis_config.default_metric
+        if self.isis_config.default_hello_interval is not None:
+            config["hello_interval"] = self.isis_config.default_hello_interval
+        if self.isis_config.default_hello_multiplier is not None:
+            config["hello_multiplier"] = self.isis_config.default_hello_multiplier
+        if self.isis_config.default_priority is not None:
+            config["priority"] = self.isis_config.default_priority
+
+        # Layer 3: Interface-specific overrides from database
+        if self.metric is not None:
+            config["metric"] = self.metric
+        config["circuit_type"] = self.circuit_type  # Always from interface
+
+        # Layer 4: Interface-level config context (most specific)
+        if hasattr(self.interface, "config_context") and self.interface.config_context:
+            if_ctx = self.interface.config_context.get("igp", {}).get("isis", {})
+            config.update({k: v for k, v in if_ctx.items() if v is not None})
+
+        return config
+
+    def get_vendor_config(self, vendor=None):
+        """
+        Get vendor-specific configuration from config context.
+
+        Args:
+            vendor (str, optional): Specific vendor ('cisco', 'juniper', etc.).
+                                   If None, returns all vendor configs.
+
+        Returns:
+            dict: Vendor-specific configuration settings
+        """
+        vendor_config = {}
+
+        if hasattr(self.device, "config_context") and self.device.config_context:
+            isis_ctx = self.device.config_context.get("igp", {}).get("isis", {})
+
+            if vendor:
+                vendor_config = isis_ctx.get(vendor, {})
+            else:
+                # Return all vendor-specific configs
+                for key, value in isis_ctx.items():
+                    if key not in ["metric", "hello_interval", "hello_multiplier", "priority"]:
+                        vendor_config[key] = value
+
+        return vendor_config
 
     def __str__(self):
         return f"ISIS {self.circuit_type} on {self.interface}"
@@ -258,6 +367,28 @@ class OSPFConfiguration(PrimaryModel):
     )
     process_id = models.PositiveIntegerField(default=1, help_text="OSPF Process ID.")
     status = StatusField(null=True)
+
+    # Default values for interface inheritance (hybrid approach)
+    default_cost = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default OSPF cost for interfaces (overridable at interface level)",
+    )
+    default_hello_interval = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default hello interval in seconds (can be overridden by config context)",
+    )
+    default_dead_interval = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default dead interval in seconds (can be overridden by config context)",
+    )
+    default_priority = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Default router priority (can be overridden by config context)",
+    )
 
     class Meta:
         unique_together = ("instance", "process_id")
@@ -288,13 +419,102 @@ class OSPFInterfaceConfiguration(PrimaryModel):
     )
     interface = models.ForeignKey(Interface, on_delete=models.CASCADE, related_name="ospf_configurations")
     area = models.CharField(max_length=15, help_text="OSPF Area for this interface (e.g., 0.0.0.0)")
-    cost = models.PositiveIntegerField(default=1, help_text="OSPF cost for this interface.")
+    cost = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="OSPF cost for this interface. If not set, inherits from OSPF configuration default.",
+    )
     status = StatusField(null=True)
 
     class Meta:
         unique_together = ("ospf_config", "interface")
         verbose_name = "OSPF Interface Configuration"
         verbose_name_plural = "OSPF Interface Configurations"
+
+    def get_effective_cost(self):
+        """Get effective cost with inheritance: interface > ospf_config default > global default."""
+        if self.cost is not None:
+            return self.cost
+        if self.ospf_config.default_cost is not None:
+            return self.ospf_config.default_cost
+        return 1  # Global default for OSPF
+
+    def get_effective_config(self):
+        """
+        Get effective configuration with full inheritance chain.
+
+        Priority order (highest to lowest):
+        1. Interface-specific database fields
+        2. OSPF configuration defaults (database)
+        3. Device config context (flexible/optional settings)
+        4. Global protocol defaults
+
+        Returns:
+            dict: Complete effective configuration for this interface
+        """
+        # Start with global protocol defaults
+        config = {
+            "cost": 1,
+            "hello_interval": 10,
+            "dead_interval": 40,
+            "priority": 1,
+            "area": self.area,
+        }
+
+        # Layer 1: Device-level config context (organization-wide defaults)
+        if hasattr(self.interface, "device") and hasattr(self.interface.device, "config_context"):
+            if self.interface.device.config_context:
+                device_ctx = self.interface.device.config_context.get("igp", {}).get("ospf", {})
+                config.update({k: v for k, v in device_ctx.items() if v is not None})
+
+        # Layer 2: OSPF configuration defaults from database
+        if self.ospf_config.default_cost is not None:
+            config["cost"] = self.ospf_config.default_cost
+        if self.ospf_config.default_hello_interval is not None:
+            config["hello_interval"] = self.ospf_config.default_hello_interval
+        if self.ospf_config.default_dead_interval is not None:
+            config["dead_interval"] = self.ospf_config.default_dead_interval
+        if self.ospf_config.default_priority is not None:
+            config["priority"] = self.ospf_config.default_priority
+
+        # Layer 3: Interface-specific overrides from database
+        if self.cost is not None:
+            config["cost"] = self.cost
+        config["area"] = self.area  # Always from interface
+
+        # Layer 4: Interface-level config context (most specific)
+        if hasattr(self.interface, "config_context") and self.interface.config_context:
+            if_ctx = self.interface.config_context.get("igp", {}).get("ospf", {})
+            config.update({k: v for k, v in if_ctx.items() if v is not None})
+
+        return config
+
+    def get_vendor_config(self, vendor=None):
+        """
+        Get vendor-specific configuration from config context.
+
+        Args:
+            vendor (str, optional): Specific vendor ('cisco', 'juniper', etc.).
+                                   If None, returns all vendor configs.
+
+        Returns:
+            dict: Vendor-specific configuration settings
+        """
+        vendor_config = {}
+
+        if hasattr(self.interface, "device") and hasattr(self.interface.device, "config_context"):
+            if self.interface.device.config_context:
+                ospf_ctx = self.interface.device.config_context.get("igp", {}).get("ospf", {})
+
+                if vendor:
+                    vendor_config = ospf_ctx.get(vendor, {})
+                else:
+                    # Return all vendor-specific configs
+                    for key, value in ospf_ctx.items():
+                        if key not in ["cost", "hello_interval", "dead_interval", "priority"]:
+                            vendor_config[key] = value
+
+        return vendor_config
 
     def __str__(self):
         return f"OSPF Area {self.area} on {self.interface}"

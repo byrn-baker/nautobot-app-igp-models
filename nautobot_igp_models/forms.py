@@ -96,9 +96,22 @@ class ISISConfigurationForm(NautobotModelForm):
 
     class Meta:
         model = models.ISISConfiguration
-        fields = ("name", "instance", "system_id", "status")
+        fields = (
+            "name",
+            "instance",
+            "system_id",
+            "status",
+            "default_metric",
+            "default_hello_interval",
+            "default_hello_multiplier",
+            "default_priority",
+        )
         help_texts = {
-            "system_id": "Enter a value in the format XXXX.XXXX.XXXX (e.g., 0192.0003.0002). A suggestion will be provided based on Router ID and ISIS Area once an IGP Instance is selected."
+            "system_id": "Enter a value in the format XXXX.XXXX.XXXX (e.g., 0192.0003.0002). A suggestion will be provided based on Router ID and ISIS Area once an IGP Instance is selected.",
+            "default_metric": "Default metric inherited by interfaces unless overridden (leave blank for interface-specific values)",
+            "default_hello_interval": "Default hello interval inherited by interfaces (leave blank for protocol defaults or config context)",
+            "default_hello_multiplier": "Default hello multiplier inherited by interfaces (leave blank for protocol defaults or config context)",
+            "default_priority": "Default DIS priority inherited by interfaces (leave blank for protocol defaults or config context)",
         }
 
     def __init__(self, *args, **kwargs):
@@ -350,7 +363,22 @@ class OSPFConfigurationForm(NautobotModelForm):
 
     class Meta:
         model = models.OSPFConfiguration
-        fields = ("name", "instance", "process_id", "status")
+        fields = (
+            "name",
+            "instance",
+            "process_id",
+            "status",
+            "default_cost",
+            "default_hello_interval",
+            "default_dead_interval",
+            "default_priority",
+        )
+        help_texts = {
+            "default_cost": "Default cost inherited by interfaces unless overridden (leave blank for interface-specific values)",
+            "default_hello_interval": "Default hello interval inherited by interfaces (leave blank for protocol defaults or config context)",
+            "default_dead_interval": "Default dead interval inherited by interfaces (leave blank for protocol defaults or config context)",
+            "default_priority": "Default router priority inherited by interfaces (leave blank for protocol defaults or config context)",
+        }
 
 
 class OSPFConfigurationFilterForm(NautobotFilterForm):

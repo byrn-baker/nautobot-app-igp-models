@@ -57,3 +57,63 @@ Interface configurations are stored in separate models (ISISInterfaceConfigurati
 - Additional complexity in data modeling
 - More relationships to manage
 - Better alignment with real-world network configurations
+
+## Hybrid Configuration Approach
+
+### Decision
+
+The app uses a hybrid approach for managing configuration parameters, combining database fields for core protocol settings with Nautobot's config context for optional/vendor-specific parameters.
+
+### Rationale
+
+- **Type Safety**: Core protocol parameters (metric, cost, circuit type, area) are database fields with validation
+- **Flexibility**: Optional parameters (hello timers, authentication, vendor features) use config context
+- **Inheritance**: Protocol configurations provide default values that interfaces can inherit or override
+- **Queryability**: Database fields can be filtered and searched efficiently
+- **Extensibility**: Config context allows adding vendor-specific features without migrations
+- **Best of Both Worlds**: Combines structured data (database) with flexible configuration (JSON)
+
+### Configuration Inheritance Chain
+
+Priority order (highest to lowest):
+1. Interface-specific database fields (explicit overrides)
+2. Protocol configuration defaults (database)
+3. Device/Interface config context (flexible settings)
+4. Global protocol defaults (fallback values)
+
+### Implementation
+
+**Database Fields for Core Parameters:**
+- ISIS: default_metric, default_hello_interval, default_hello_multiplier, default_priority
+- OSPF: default_cost, default_hello_interval, default_dead_interval, default_priority
+
+**Config Context for Optional Parameters:**
+- Authentication settings
+- Vendor-specific features (BFD, MPLS TE, fast-reroute)
+- Environment-specific defaults
+- Settings referencing secrets
+
+**Helper Methods:**
+- `get_effective_metric()` / `get_effective_cost()`: Returns inherited or explicit value
+- `get_effective_config()`: Returns complete merged configuration
+- `get_vendor_config()`: Returns vendor-specific settings from config context
+
+### Consequences
+
+**Advantages:**
+- Core protocol settings are type-safe and validated
+- Optional settings don't require migrations
+- Easy to query/filter on database fields
+- Vendor-specific features can be added dynamically
+- Configuration generation can use both sources
+
+**Trade-offs:**
+- Two sources of truth require coordination
+- Config context values aren't validated at database level
+- Developers must understand both systems
+- More complex configuration retrieval logic
+
+**Mitigation:**
+- Clear documentation on when to use each approach
+- Helper methods encapsulate complexity
+- Validation can be added at form/serializer level for config context
