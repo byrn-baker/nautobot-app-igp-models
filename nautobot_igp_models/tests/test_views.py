@@ -80,7 +80,8 @@ class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        return {"add_tags": [], "remove_tags": []}
+        # ISISConfiguration can have instance changed in bulk
+        return {"instance": self.igp_instances["isis_router2"].pk}
 
 
 class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -154,7 +155,8 @@ class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        return {"add_tags": [], "remove_tags": []}
+        # OSPFConfiguration has process_id that can be bulk-edited
+        return {"process_id": 200}
 
 
 class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):

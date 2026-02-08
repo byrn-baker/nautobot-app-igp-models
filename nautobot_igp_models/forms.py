@@ -222,6 +222,9 @@ class ISISConfigurationFilterForm(NautobotFilterForm):
 class ISISConfigurationBulkEditForm(NautobotBulkEditForm):
     """Form for bulk editing ISISConfiguration objects."""
 
+    pk = forms.ModelMultipleChoiceField(
+        queryset=models.ISISConfiguration.objects.all(), widget=forms.MultipleHiddenInput
+    )
     instance = DynamicModelChoiceField(
         queryset=models.IGPRoutingInstance.objects.filter(protocol="ISIS"), required=False, label="IGP Instance"
     )
@@ -313,6 +316,9 @@ class ISISInterfaceConfigurationFilterForm(NautobotFilterForm):
 
 
 class ISISInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=models.ISISInterfaceConfiguration.objects.all(), widget=forms.MultipleHiddenInput
+    )
     isis_config = DynamicModelChoiceField(
         queryset=models.ISISConfiguration.objects.all(), required=False, label="ISIS Configuration"
     )
@@ -360,6 +366,9 @@ class OSPFConfigurationFilterForm(NautobotFilterForm):
 class OSPFConfigurationBulkEditForm(NautobotBulkEditForm):
     """Form for bulk editing OSPFConfiguration objects."""
 
+    pk = forms.ModelMultipleChoiceField(
+        queryset=models.OSPFConfiguration.objects.all(), widget=forms.MultipleHiddenInput
+    )
     instance = DynamicModelChoiceField(
         queryset=models.IGPRoutingInstance.objects.filter(protocol="OSPF"), required=False, label="IGP Instance"
     )
@@ -401,6 +410,9 @@ class OSPFInterfaceConfigurationFilterForm(NautobotFilterForm):
 
 
 class OSPFInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
+    pk = forms.ModelMultipleChoiceField(
+        queryset=models.OSPFInterfaceConfiguration.objects.all(), widget=forms.MultipleHiddenInput
+    )
     ospf_config = DynamicModelChoiceField(
         queryset=models.OSPFConfiguration.objects.all(), required=False, label="OSPF Configuration"
     )

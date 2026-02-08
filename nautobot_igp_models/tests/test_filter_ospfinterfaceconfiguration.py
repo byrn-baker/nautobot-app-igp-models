@@ -52,7 +52,7 @@ class OSPFInterfaceConfigurationFilterTestCase(TestCase):
         ospf_int_configs = create_ospf_interface_configurations()
 
         filterset = OSPFInterfaceConfigurationFilterSet(
-            data={"interface": [ospf_int_configs["router1_ge1"].interface.pk]},
+            data={"interface": [str(ospf_int_configs["router1_ge1"].interface.pk)]},
             queryset=OSPFInterfaceConfiguration.objects.all(),
         )
 
