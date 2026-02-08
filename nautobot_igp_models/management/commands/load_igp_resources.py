@@ -198,11 +198,22 @@ class Command(BaseCommand):
 
     def _wrap_isis_template(self, template_code):
         """Wrap ISIS template for export template context."""
-        # Export templates have access to 'obj' which is the ISISConfiguration instance
-        # We need to adapt the template variables
+        # Export templates receive the object directly in the context
+        # The object is available as a variable with the model name
+        # We need to detect and adapt the template variables
         wrapper = """{# Export Template Wrapper for ISISConfiguration #}
-{% set isis_config = obj %}
-{% set interfaces = isis_config.interface_configurations.all %}
+{# The ISISConfiguration object is available in the template context #}
+{# We set the expected variable names for compatibility #}
+{% if isisconfiguration is defined %}
+  {% set isis_config = isisconfiguration %}
+{% elif obj is defined %}
+  {% set isis_config = obj %}
+{% elif object is defined %}
+  {% set isis_config = object %}
+{% endif %}
+{% if isis_config is defined %}
+  {% set interfaces = isis_config.interface_configurations.all %}
+{% endif %}
 
 """
         return wrapper + template_code
@@ -210,8 +221,17 @@ class Command(BaseCommand):
     def _wrap_ospf_template(self, template_code):
         """Wrap OSPF template for export template context."""
         wrapper = """{# Export Template Wrapper for OSPFConfiguration #}
-{% set ospf_config = obj %}
-{% set interfaces = ospf_config.interface_configurations.all %}
+{# The OSPFConfiguration object is available in the template context #}
+{% if ospfconfiguration is defined %}
+  {% set ospf_config = ospfconfiguration %}
+{% elif obj is defined %}
+  {% set ospf_config = obj %}
+{% elif object is defined %}
+  {% set ospf_config = object %}
+{% endif %}
+{% if ospf_config is defined %}
+  {% set interfaces = ospf_config.interface_configurations.all %}
+{% endif %}
 
 """
         return wrapper + template_code
