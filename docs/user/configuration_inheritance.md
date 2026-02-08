@@ -305,9 +305,9 @@ interface GigabitEthernet0/0/1
 
 The app provides JSON Schema files for validating config context structure:
 
-- **ISIS:** [nautobot_igp_models/schemas/config_context_isis.json](../../nautobot_igp_models/schemas/config_context_isis.json)
-- **OSPF:** [nautobot_igp_models/schemas/config_context_ospf.json](../../nautobot_igp_models/schemas/config_context_ospf.json)
-- **Documentation:** [schemas/README.md](../../nautobot_igp_models/schemas/README.md)
+- **ISIS:** [config_context_isis.json](https://github.com/byrn-baker/nautobot-app-igp-models/blob/main/nautobot_igp_models/schemas/config_context_isis.json)
+- **OSPF:** [config_context_ospf.json](https://github.com/byrn-baker/nautobot-app-igp-models/blob/main/nautobot_igp_models/schemas/config_context_ospf.json)
+- **Documentation:** [schemas/README.md](https://github.com/byrn-baker/nautobot-app-igp-models/blob/main/nautobot_igp_models/schemas/README.md)
 
 These schemas provide:
 - Type validation (integers, booleans, strings)
