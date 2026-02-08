@@ -238,12 +238,20 @@ class Command(BaseCommand):
 
     def _wrap_isis_template(self, template_code):
         """Wrap ISIS template for export template context."""
-        # Export templates receive the object directly in the context
-        # The object is available as a variable with the model name
-        # We need to detect and adapt the template variables
+        # Export templates can be called from detail page (single object) or list page (queryset)
+        # For queryset exports, we need to iterate. For single object, we access directly.
         wrapper = """{# Export Template Wrapper for ISISConfiguration #}
-{# The ISISConfiguration object is available in the template context #}
-{# We set the expected variable names for compatibility #}
+{# Handle both single object and queryset export contexts #}
+{% if queryset is defined %}
+{# Queryset export - iterate over objects #}
+{% for isis_config in queryset %}
+{% set interfaces = isis_config.interface_configurations.all %}
+"""
+        footer = """
+{% endfor %}
+{# End of queryset iteration #}
+{% else %}
+{# Single object export - find the object in context #}
 {% if isisconfiguration is defined %}
   {% set isis_config = isisconfiguration %}
 {% elif obj is defined %}
@@ -251,17 +259,26 @@ class Command(BaseCommand):
 {% elif object is defined %}
   {% set isis_config = object %}
 {% endif %}
-{% if isis_config is defined %}
-  {% set interfaces = isis_config.interface_configurations.all %}
-{% endif %}
-
+{% set interfaces = isis_config.interface_configurations.all %}
 """
-        return wrapper + template_code
+
+        return wrapper + template_code + footer + "{% endif %}\n"
 
     def _wrap_ospf_template(self, template_code):
         """Wrap OSPF template for export template context."""
+        # Export templates can be called from detail page (single object) or list page (queryset)
         wrapper = """{# Export Template Wrapper for OSPFConfiguration #}
-{# The OSPFConfiguration object is available in the template context #}
+{# Handle both single object and queryset export contexts #}
+{% if queryset is defined %}
+{# Queryset export - iterate over objects #}
+{% for ospf_config in queryset %}
+{% set interfaces = ospf_config.interface_configurations.all %}
+"""
+        footer = """
+{% endfor %}
+{# End of queryset iteration #}
+{% else %}
+{# Single object export - find the object in context #}
 {% if ospfconfiguration is defined %}
   {% set ospf_config = ospfconfiguration %}
 {% elif obj is defined %}
@@ -269,9 +286,7 @@ class Command(BaseCommand):
 {% elif object is defined %}
   {% set ospf_config = object %}
 {% endif %}
-{% if ospf_config is defined %}
-  {% set interfaces = ospf_config.interface_configurations.all %}
-{% endif %}
-
+{% set interfaces = ospf_config.interface_configurations.all %}
 """
-        return wrapper + template_code
+
+        return wrapper + template_code + footer + "{% endif %}\n"
