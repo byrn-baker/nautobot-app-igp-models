@@ -8,6 +8,7 @@
   Variables expected:
   - isis_config: ISISConfiguration object
   - interfaces: List of ISISInterfaceConfiguration objects
+  - device_config_context: Pre-computed config context from device
 #}
 protocols {
     isis {{ isis_config.name }} {
@@ -15,18 +16,18 @@ protocols {
 {%- if isis_config.default_hello_interval %}
             hello-interval {{ isis_config.default_hello_interval }};
 {%- endif %}
-{%- if isis_config.instance.device.config_context.igp.isis.authentication is defined %}
-{%- set auth = isis_config.instance.device.config_context.igp.isis.authentication %}
+{%- if device_config_context.igp.isis.authentication is defined %}
+{%- set auth = device_config_context.igp.isis.authentication %}
             authentication-key "{{ auth.key }}";
             authentication-type {{ auth.type }};
 {%- endif %}
-{%- if isis_config.instance.device.config_context.igp.isis.juniper.wide_metrics_only is defined %}
+{%- if device_config_context.igp.isis.juniper.wide_metrics_only is defined %}
             wide-metrics-only;
 {%- endif %}
         }
         net {{ isis_config.system_id }};
-{%- if isis_config.instance.device.config_context.igp.isis.juniper.reference_bandwidth is defined %}
-        reference-bandwidth {{ isis_config.instance.device.config_context.igp.isis.juniper.reference_bandwidth }};
+{%- if device_config_context.igp.isis.juniper.reference_bandwidth is defined %}
+        reference-bandwidth {{ device_config_context.igp.isis.juniper.reference_bandwidth }};
 {%- endif %}
 {% for interface_config in interfaces %}
 {%- set effective = interface_config.get_effective_config() %}

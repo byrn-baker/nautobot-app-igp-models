@@ -246,6 +246,7 @@ class Command(BaseCommand):
 {# Queryset export - iterate over objects #}
 {% for isis_config in queryset %}
 {% set interfaces = isis_config.interface_configurations.all %}
+{% set device_config_context = isis_config.instance.device.get_config_context() %}
 """
         footer = """
 {% endfor %}
@@ -260,6 +261,7 @@ class Command(BaseCommand):
   {% set isis_config = object %}
 {% endif %}
 {% set interfaces = isis_config.interface_configurations.all %}
+{% set device_config_context = isis_config.instance.device.get_config_context() %}
 """
 
         return wrapper + template_code + footer + "{% endif %}\n"
@@ -273,6 +275,7 @@ class Command(BaseCommand):
 {# Queryset export - iterate over objects #}
 {% for ospf_config in queryset %}
 {% set interfaces = ospf_config.interface_configurations.all %}
+{% set device_config_context = ospf_config.instance.device.get_config_context() %}
 """
         footer = """
 {% endfor %}
@@ -287,6 +290,7 @@ class Command(BaseCommand):
   {% set ospf_config = object %}
 {% endif %}
 {% set interfaces = ospf_config.interface_configurations.all %}
+{% set device_config_context = ospf_config.instance.device.get_config_context() %}
 """
 
         return wrapper + template_code + footer + "{% endif %}\n"

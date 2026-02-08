@@ -8,6 +8,7 @@
   Variables expected:
   - isis_config: ISISConfiguration object
   - interfaces: List of ISISInterfaceConfiguration objects
+  - device_config_context: Pre-computed config context from device
 #}
 !
 ! ISIS Configuration for {{ isis_config.instance.device.name }}
@@ -15,13 +16,13 @@
 router isis {{ isis_config.name }}
  net {{ isis_config.system_id }}
  is-type level-2-only
-{%- if isis_config.instance.device.config_context.igp.isis.authentication is defined %}
-{%- set auth = isis_config.instance.device.config_context.igp.isis.authentication %}
+{%- if device_config_context.igp.isis.authentication is defined %}
+{%- set auth = device_config_context.igp.isis.authentication %}
  authentication mode {{ auth.type }} {% if auth.level %}{{ auth.level }}{% endif %}
  authentication key-chain ISIS-KEY {% if auth.level %}{{ auth.level }}{% endif %}
 {%- endif %}
-{%- if isis_config.instance.device.config_context.igp.isis.cisco.metric_style is defined %}
- metric-style {{ isis_config.instance.device.config_context.igp.isis.cisco.metric_style }}
+{%- if device_config_context.igp.isis.cisco.metric_style is defined %}
+ metric-style {{ device_config_context.igp.isis.cisco.metric_style }}
 {%- else %}
  metric-style wide
 {%- endif %}
