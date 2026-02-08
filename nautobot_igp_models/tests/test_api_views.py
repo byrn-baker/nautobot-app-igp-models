@@ -24,6 +24,7 @@ class IGPRoutingInstanceAPIViewTest(APIViewTestCases.APIViewTestCase):
     @property
     def create_data(self):
         """Return data for creating IGPRoutingInstance via API."""
+        # Use management VRF to avoid conflicts with fixtures that use global VRF
         return [
             {
                 "name": "API-Test-IGP-1",
@@ -31,7 +32,7 @@ class IGPRoutingInstanceAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "device": str(self.devices["router1"].pk),
                 "protocol": "ISIS",
                 "router_id": str(self.ip_addresses["router1"].pk),
-                "vrf": str(self.vrfs["global"].pk),
+                "vrf": str(self.vrfs["management"].pk),
                 "isis_area": "49.0001",
                 "status": str(self.statuses["active"].pk),
             },
@@ -41,16 +42,16 @@ class IGPRoutingInstanceAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "device": str(self.devices["router2"].pk),
                 "protocol": "OSPF",
                 "router_id": str(self.ip_addresses["router2"].pk),
-                "vrf": str(self.vrfs["global"].pk),
+                "vrf": str(self.vrfs["management"].pk),
                 "status": str(self.statuses["active"].pk),
             },
             {
                 "name": "API-Test-IGP-3",
                 "description": "API test IGP instance 3",
-                "device": str(self.devices["router2"].pk),
+                "device": str(self.devices["router3"].pk),
                 "protocol": "ISIS",
-                "router_id": str(self.ip_addresses["router2"].pk),
-                "vrf": str(self.vrfs["global"].pk),
+                "router_id": str(self.ip_addresses["router3"].pk),
+                "vrf": str(self.vrfs["management"].pk),
                 "isis_area": "49.0002",
                 "status": str(self.statuses["active"].pk),
             },
@@ -78,6 +79,8 @@ class ISISConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     @property
     def create_data(self):
         """Return data for creating ISISConfiguration via API."""
+        # Note: These will fail due to unique constraint conflicts with fixtures
+        # TODO: Need to refactor to create new IGP instances without configs
         return [
             {
                 "name": "API-ISIS-Config-1",
@@ -93,7 +96,7 @@ class ISISConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
             },
             {
                 "name": "API-ISIS-Config-3",
-                "instance": str(self.igp_instances["isis_router1"].pk),
+                "instance": str(self.igp_instances["isis_router3"].pk),
                 "system_id": "49.0001.4444.5555.6666.00",
                 "status": str(self.statuses["planned"].pk),
             },
@@ -123,6 +126,7 @@ class ISISInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     @property
     def create_data(self):
         """Return data for creating ISISInterfaceConfiguration via API."""
+        # Using ge2 and loopback0 to avoid conflicts with fixtures that use ge1
         return [
             {
                 "name": "API-ISIS-Int-1",
@@ -144,9 +148,9 @@ class ISISInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
             },
             {
                 "name": "API-ISIS-Int-3",
-                "isis_config": str(self.isis_configurations["router1"].pk),
-                "device": str(self.devices["router1"].pk),
-                "interface": str(self.interfaces["router1"]["ge1"].pk),
+                "isis_config": str(self.isis_configurations["router3"].pk),
+                "device": str(self.devices["router3"].pk),
+                "interface": str(self.interfaces["router3"]["ge2"].pk),
                 "circuit_type": "L1",
                 "metric": 30,
                 "status": str(self.statuses["planned"].pk),
@@ -239,7 +243,7 @@ class OSPFInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
             {
                 "name": "API-OSPF-Int-3",
                 "ospf_config": str(self.ospf_configurations["router1"].pk),
-                "interface": str(self.interfaces["router1"]["ge1"].pk),
+                "interface": str(self.interfaces["router1"]["ge2"].pk),
                 "area": "0.0.0.2",
                 "cost": 30,
                 "status": str(self.statuses["planned"].pk),
