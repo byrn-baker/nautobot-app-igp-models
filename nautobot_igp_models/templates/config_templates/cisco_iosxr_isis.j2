@@ -1,0 +1,75 @@
+{#
+  Cisco IOS XR ISIS Configuration Template
+
+  Uses hybrid configuration inheritance:
+  - Database fields for core parameters (metric, circuit type)
+  - Config context for optional/vendor settings (BFD, auth, MPLS)
+
+  Variables expected:
+  - isis_config: ISISConfiguration object
+  - interfaces: List of ISISInterfaceConfiguration objects
+#}
+!
+! ISIS Configuration for {{ isis_config.instance.device.name }}
+!
+router isis {{ isis_config.name }}
+ net {{ isis_config.system_id }}
+ is-type level-2-only
+{%- if isis_config.instance.device.config_context.igp.isis.authentication is defined %}
+{%- set auth = isis_config.instance.device.config_context.igp.isis.authentication %}
+ address-family ipv4 unicast
+  authentication keychain ISIS-KEY {{ auth.level|default('') }}
+ !
+{%- endif %}
+{%- if isis_config.instance.device.config_context.igp.isis.cisco.metric_style is defined %}
+ metric-style {{ isis_config.instance.device.config_context.igp.isis.cisco.metric_style }}
+{%- else %}
+ metric-style wide
+{%- endif %}
+ log adjacency changes
+!
+{% for interface_config in interfaces %}
+{%- set effective = interface_config.get_effective_config() %}
+{%- set cisco_config = interface_config.get_vendor_config('cisco') %}
+!
+interface {{ interface_config.interface.name }}
+ description ISIS {{ isis_config.name }} - {{ effective.circuit_type }}
+ address-family ipv4 unicast
+ !
+ router isis {{ isis_config.name }}
+{%- if effective.circuit_type == 'L1' %}
+  circuit-type level-1
+{%- elif effective.circuit_type == 'L2' %}
+  circuit-type level-2-only
+{%- else %}
+  circuit-type level-1-2
+{%- endif %}
+  point-to-point
+  address-family ipv4 unicast
+   metric {{ effective.metric }}
+{%- if effective.hello_interval is defined %}
+   hello-interval {{ effective.hello_interval }}
+{%- endif %}
+{%- if effective.hello_multiplier is defined %}
+   hello-multiplier {{ effective.hello_multiplier }}
+{%- endif %}
+{%- if effective.priority is defined %}
+   priority {{ effective.priority }}
+{%- endif %}
+{%- if cisco_config.bfd is defined and cisco_config.bfd.enabled %}
+   bfd minimum-interval {{ cisco_config.bfd.interval|default(50) }}
+   bfd multiplier {{ cisco_config.bfd.multiplier|default(3) }}
+{%- endif %}
+{%- if cisco_config.mpls_traffic_eng %}
+   metric {{ effective.metric }} level-2
+{%- endif %}
+  !
+{%- if cisco_config.fast_reroute is defined and cisco_config.fast_reroute.per_prefix %}
+  fast-reroute per-prefix
+{%- endif %}
+ !
+!
+{% endfor %}
+!
+! End of ISIS configuration
+!

@@ -103,10 +103,18 @@ Access these schemas at: **Extensibility > Config Context Schemas**
 
 ### Export Templates
 
-Configuration templates for generating device configurations:
-- **ISIS Configuration (Cisco IOS)** - For `ISISConfiguration` model
-- **ISIS Configuration (Juniper JunOS)** - For `ISISConfiguration` model
-- **OSPF Configuration (Cisco IOS)** - For `OSPFConfiguration` model
+Configuration templates for generating multi-vendor device configurations:
+
+**ISIS Templates (4 vendors):**
+- Cisco IOS
+- Cisco IOS XR
+- Juniper JunOS
+- Arista EOS
+
+**OSPF Templates (3 vendors):**
+- Cisco IOS
+- Cisco IOS XR
+- Arista EOS
 
 Export templates appear in the "Export" button dropdown on object detail pages.
 

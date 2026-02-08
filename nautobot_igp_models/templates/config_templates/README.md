@@ -4,9 +4,16 @@ This directory contains Jinja2 templates for generating IGP device configuration
 
 ## Available Templates
 
+### ISIS Templates (4 vendors)
 - `cisco_ios_isis.j2` - Cisco IOS ISIS configuration
-- `cisco_ios_ospf.j2` - Cisco IOS OSPF configuration
+- `cisco_iosxr_isis.j2` - Cisco IOS XR ISIS configuration
 - `juniper_isis.j2` - Juniper JunOS ISIS configuration
+- `arista_eos_isis.j2` - Arista EOS ISIS configuration
+
+### OSPF Templates (3 vendors)
+- `cisco_ios_ospf.j2` - Cisco IOS OSPF configuration
+- `cisco_iosxr_ospf.j2` - Cisco IOS XR OSPF configuration
+- `arista_eos_ospf.j2` - Arista EOS OSPF configuration
 
 ## Usage
 

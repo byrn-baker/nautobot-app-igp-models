@@ -1,0 +1,73 @@
+{#
+  Cisco IOS XR OSPF Configuration Template
+
+  Uses hybrid configuration inheritance:
+  - Database fields for core parameters (cost, timers, priority)
+  - Config context for optional/vendor settings (BFD, auth)
+
+  Variables expected:
+  - ospf_config: OSPFConfiguration object
+  - interfaces: List of OSPFInterfaceConfiguration objects
+#}
+!
+! OSPF Configuration for {{ ospf_config.instance.device.name }}
+!
+router ospf {{ ospf_config.process_id }}
+{%- if ospf_config.instance.router_id %}
+ router-id {{ ospf_config.instance.router_id.address.ip }}
+{%- endif %}
+ log adjacency changes
+!
+{% for interface_config in interfaces %}
+{%- set effective = interface_config.get_effective_config() %}
+{%- set cisco_config = interface_config.get_vendor_config('cisco') %}
+!
+interface {{ interface_config.interface.name }}
+ description OSPF {{ ospf_config.process_id }} - Area {{ interface_config.area }}
+ router ospf {{ ospf_config.process_id }} area {{ interface_config.area }}
+{%- if effective.network_type is defined %}
+  network {{ effective.network_type }}
+{%- else %}
+  network point-to-point
+{%- endif %}
+{%- if effective.cost is defined %}
+  cost {{ effective.cost }}
+{%- endif %}
+{%- if effective.hello_interval is defined %}
+  hello-interval {{ effective.hello_interval }}
+{%- endif %}
+{%- if effective.dead_interval is defined %}
+  dead-interval {{ effective.dead_interval }}
+{%- endif %}
+{%- if effective.priority is defined %}
+  priority {{ effective.priority }}
+{%- endif %}
+{%- if cisco_config.authentication is defined %}
+{%-   if cisco_config.authentication.type == 'md5' %}
+  authentication message-digest
+  message-digest-key {{ cisco_config.authentication.key_id|default(1) }} md5 {{ cisco_config.authentication.key }}
+{%-   elif cisco_config.authentication.type == 'simple' %}
+  authentication
+  authentication-key {{ cisco_config.authentication.key }}
+{%-   endif %}
+{%- endif %}
+{%- if cisco_config.bfd is defined and cisco_config.bfd.enabled %}
+  bfd minimum-interval {{ cisco_config.bfd.interval|default(50) }}
+  bfd multiplier {{ cisco_config.bfd.multiplier|default(3) }}
+  bfd fast-detect
+{%- endif %}
+{%- if cisco_config.mtu_ignore %}
+  mtu-ignore
+{%- endif %}
+{%- if cisco_config.passive %}
+  passive
+{%- endif %}
+{%- if cisco_config.mpls_traffic_eng %}
+  mpls traffic-eng
+{%- endif %}
+ !
+!
+{% endfor %}
+!
+! End of OSPF configuration
+!

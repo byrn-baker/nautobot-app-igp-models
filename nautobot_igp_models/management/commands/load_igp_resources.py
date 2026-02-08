@@ -116,6 +116,7 @@ class Command(BaseCommand):
         ospf_ct = ContentType.objects.get_for_model(OSPFConfiguration)
 
         templates = [
+            # Cisco IOS Templates
             {
                 "name": "ISIS Configuration (Cisco IOS)",
                 "content_type": isis_ct,
@@ -126,6 +127,35 @@ class Command(BaseCommand):
                 "file_extension": "txt",
             },
             {
+                "name": "OSPF Configuration (Cisco IOS)",
+                "content_type": ospf_ct,
+                "description": "Generate Cisco IOS OSPF configuration",
+                "file": "cisco_ios_ospf.j2",
+                "template_code": None,
+                "mime_type": "text/plain",
+                "file_extension": "txt",
+            },
+            # Cisco IOS XR Templates
+            {
+                "name": "ISIS Configuration (Cisco IOS XR)",
+                "content_type": isis_ct,
+                "description": "Generate Cisco IOS XR ISIS configuration",
+                "file": "cisco_iosxr_isis.j2",
+                "template_code": None,
+                "mime_type": "text/plain",
+                "file_extension": "txt",
+            },
+            {
+                "name": "OSPF Configuration (Cisco IOS XR)",
+                "content_type": ospf_ct,
+                "description": "Generate Cisco IOS XR OSPF configuration",
+                "file": "cisco_iosxr_ospf.j2",
+                "template_code": None,
+                "mime_type": "text/plain",
+                "file_extension": "txt",
+            },
+            # Juniper JunOS Templates
+            {
                 "name": "ISIS Configuration (Juniper JunOS)",
                 "content_type": isis_ct,
                 "description": "Generate Juniper JunOS ISIS configuration",
@@ -134,11 +164,21 @@ class Command(BaseCommand):
                 "mime_type": "text/plain",
                 "file_extension": "txt",
             },
+            # Arista EOS Templates
             {
-                "name": "OSPF Configuration (Cisco IOS)",
+                "name": "ISIS Configuration (Arista EOS)",
+                "content_type": isis_ct,
+                "description": "Generate Arista EOS ISIS configuration",
+                "file": "arista_eos_isis.j2",
+                "template_code": None,
+                "mime_type": "text/plain",
+                "file_extension": "txt",
+            },
+            {
+                "name": "OSPF Configuration (Arista EOS)",
                 "content_type": ospf_ct,
-                "description": "Generate Cisco IOS OSPF configuration",
-                "file": "cisco_ios_ospf.j2",
+                "description": "Generate Arista EOS OSPF configuration",
+                "file": "arista_eos_ospf.j2",
                 "template_code": None,
                 "mime_type": "text/plain",
                 "file_extension": "txt",

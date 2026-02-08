@@ -45,9 +45,16 @@ nautobot-server migrate
 
 #### Export Templates
 
-- **ISIS Configuration (Cisco IOS)** - For ISISConfiguration model
-- **ISIS Configuration (Juniper JunOS)** - For ISISConfiguration model
-- **OSPF Configuration (Cisco IOS)** - For OSPFConfiguration model
+**ISIS Configuration Templates:**
+- Cisco IOS - For ISISConfiguration model
+- Cisco IOS XR - For ISISConfiguration model
+- Juniper JunOS - For ISISConfiguration model
+- Arista EOS - For ISISConfiguration model
+
+**OSPF Configuration Templates:**
+- Cisco IOS - For OSPFConfiguration model
+- Cisco IOS XR - For OSPFConfiguration model
+- Arista EOS - For OSPFConfiguration model
 
 Export templates are available from the object detail page under the "Export" button.
 

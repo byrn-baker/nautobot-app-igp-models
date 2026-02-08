@@ -1,0 +1,70 @@
+{#
+  Arista EOS ISIS Configuration Template
+
+  Uses hybrid configuration inheritance:
+  - Database fields for core parameters (metric, circuit type)
+  - Config context for optional/vendor settings (BFD, segment routing)
+
+  Variables expected:
+  - isis_config: ISISConfiguration object
+  - interfaces: List of ISISInterfaceConfiguration objects
+#}
+!
+! ISIS Configuration for {{ isis_config.instance.device.name }}
+!
+router isis {{ isis_config.name }}
+   net {{ isis_config.system_id }}
+   is-type level-2
+{%- if isis_config.instance.device.config_context.igp.isis.authentication is defined %}
+{%- set auth = isis_config.instance.device.config_context.igp.isis.authentication %}
+   authentication mode {{ auth.type }} level-2
+   authentication key 0 {{ auth.key }} level-2
+{%- endif %}
+{%- if isis_config.instance.device.config_context.igp.isis.arista.segment_routing is defined and isis_config.instance.device.config_context.igp.isis.arista.segment_routing.enabled %}
+   segment-routing mpls
+{%- endif %}
+   !
+   address-family ipv4 unicast
+{%- if isis_config.instance.device.config_context.igp.isis.arista.bfd %}
+      bfd all-interfaces
+{%- endif %}
+   !
+!
+{% for interface_config in interfaces %}
+{%- set effective = interface_config.get_effective_config() %}
+{%- set arista_config = interface_config.get_vendor_config('arista') %}
+!
+interface {{ interface_config.interface.name }}
+   description ISIS {{ isis_config.name }} - {{ effective.circuit_type }}
+{%- if effective.circuit_type == 'L1' %}
+   isis circuit-type level-1
+{%- elif effective.circuit_type == 'L2' %}
+   isis circuit-type level-2
+{%- else %}
+   isis circuit-type level-1-2
+{%- endif %}
+   isis enable {{ isis_config.name }}
+   isis network point-to-point
+   isis metric {{ effective.metric }}
+{%- if effective.hello_interval is defined %}
+   isis hello-interval {{ effective.hello_interval }}
+{%- endif %}
+{%- if effective.hello_multiplier is defined %}
+   isis hello-multiplier {{ effective.hello_multiplier }}
+{%- endif %}
+{%- if effective.priority is defined %}
+   isis priority {{ effective.priority }}
+{%- endif %}
+{%- if arista_config.bfd %}
+   isis bfd
+{%- endif %}
+{%- if arista_config.segment_routing is defined and arista_config.segment_routing.enabled %}
+   isis segment-routing prefix-sid index {{ arista_config.segment_routing.prefix_sid_index }}
+{%- endif %}
+{%- if arista_config.passive %}
+   isis passive
+{%- endif %}
+{% endfor %}
+!
+! End of ISIS configuration
+!

@@ -1,0 +1,72 @@
+{#
+  Arista EOS OSPF Configuration Template
+
+  Uses hybrid configuration inheritance:
+  - Database fields for core parameters (cost, timers, priority)
+  - Config context for optional/vendor settings (BFD, segment routing)
+
+  Variables expected:
+  - ospf_config: OSPFConfiguration object
+  - interfaces: List of OSPFInterfaceConfiguration objects
+#}
+!
+! OSPF Configuration for {{ ospf_config.instance.device.name }}
+!
+router ospf {{ ospf_config.process_id }}
+{%- if ospf_config.instance.router_id %}
+   router-id {{ ospf_config.instance.router_id.address.ip }}
+{%- endif %}
+{%- if ospf_config.instance.device.config_context.igp.ospf.arista.segment_routing is defined and ospf_config.instance.device.config_context.igp.ospf.arista.segment_routing.enabled %}
+   segment-routing mpls
+{%- endif %}
+{%- if ospf_config.instance.device.config_context.igp.ospf.arista.bfd %}
+   bfd all-interfaces
+{%- endif %}
+   log-adjacency-changes
+!
+{% for interface_config in interfaces %}
+{%- set effective = interface_config.get_effective_config() %}
+{%- set arista_config = interface_config.get_vendor_config('arista') %}
+!
+interface {{ interface_config.interface.name }}
+   description OSPF {{ ospf_config.process_id }} - Area {{ interface_config.area }}
+{%- if effective.network_type is defined %}
+   ip ospf network {{ effective.network_type }}
+{%- else %}
+   ip ospf network point-to-point
+{%- endif %}
+   ip ospf area {{ interface_config.area }}
+{%- if effective.cost is defined %}
+   ip ospf cost {{ effective.cost }}
+{%- endif %}
+{%- if effective.hello_interval is defined %}
+   ip ospf hello-interval {{ effective.hello_interval }}
+{%- endif %}
+{%- if effective.dead_interval is defined %}
+   ip ospf dead-interval {{ effective.dead_interval }}
+{%- endif %}
+{%- if effective.priority is defined %}
+   ip ospf priority {{ effective.priority }}
+{%- endif %}
+{%- if effective.authentication is defined %}
+{%-   if effective.authentication.type == 'md5' %}
+   ip ospf authentication message-digest
+   ip ospf message-digest-key {{ effective.authentication.key_id|default(1) }} md5 7 {{ effective.authentication.key }}
+{%-   elif effective.authentication.type == 'simple' %}
+   ip ospf authentication
+   ip ospf authentication-key 7 {{ effective.authentication.key }}
+{%-   endif %}
+{%- endif %}
+{%- if arista_config.bfd %}
+   ip ospf bfd
+{%- endif %}
+{%- if arista_config.segment_routing is defined and arista_config.segment_routing.enabled %}
+   ip ospf segment-routing prefix-sid index {{ arista_config.segment_routing.prefix_sid_index }}
+{%- endif %}
+{%- if arista_config.passive %}
+   ip ospf passive
+{%- endif %}
+{% endfor %}
+!
+! End of OSPF configuration
+!
