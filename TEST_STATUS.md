@@ -115,9 +115,9 @@ All 5 REST API endpoints properly registered and accessible:
 ### Test Results Summary
 ```
 Total Tests:     475
-Passing:         363 (76.4%)
+Passing:         367 (77.3%)
 Failures:        102 (21.5%)
-Errors:          12 (2.5%)
+Errors:          6 (1.3%)
 Skipped:         17
 ```
 
