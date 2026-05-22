@@ -4,60 +4,59 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('nautobot_igp_models', '0001_initial'),
+        ("nautobot_igp_models", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='isisconfiguration',
-            name='default_hello_interval',
+            model_name="isisconfiguration",
+            name="default_hello_interval",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='isisconfiguration',
-            name='default_hello_multiplier',
+            model_name="isisconfiguration",
+            name="default_hello_multiplier",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='isisconfiguration',
-            name='default_metric',
+            model_name="isisconfiguration",
+            name="default_metric",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='isisconfiguration',
-            name='default_priority',
+            model_name="isisconfiguration",
+            name="default_priority",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='ospfconfiguration',
-            name='default_cost',
+            model_name="ospfconfiguration",
+            name="default_cost",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='ospfconfiguration',
-            name='default_dead_interval',
+            model_name="ospfconfiguration",
+            name="default_dead_interval",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='ospfconfiguration',
-            name='default_hello_interval',
+            model_name="ospfconfiguration",
+            name="default_hello_interval",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='ospfconfiguration',
-            name='default_priority',
+            model_name="ospfconfiguration",
+            name="default_priority",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='isisinterfaceconfiguration',
-            name='metric',
+            model_name="isisinterfaceconfiguration",
+            name="metric",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='ospfinterfaceconfiguration',
-            name='cost',
+            model_name="ospfinterfaceconfiguration",
+            name="cost",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
     ]
