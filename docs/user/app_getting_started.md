@@ -224,7 +224,7 @@ Now that you've created your first IGP configurations, you can:
 
 ## Getting Help
 
-- **Documentation**: Full documentation available at [docs.nautobot.com](https://docs.nautobot.com/projects/nautobot-igp-models/)
+- **Documentation**: Full documentation available at [Read the Docs](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/)
 - **Issues**: Report bugs or request features on [GitHub](https://github.com/byrn-baker/nautobot-app-igp-models/issues)
 - **Community**: Join the discussion on [Nautobot Slack](https://slack.networktocode.com)
 

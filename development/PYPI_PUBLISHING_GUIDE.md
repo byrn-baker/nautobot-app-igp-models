@@ -236,7 +236,7 @@ Install from PyPI:
 pip install nautobot-igp-models
 \`\`\`
 
-For detailed installation and configuration instructions, see the [documentation](https://docs.nautobot.com/projects/nautobot-igp-models/).
+For detailed installation and configuration instructions, see the [documentation](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/).
 ```
 
 ### Announce Release (Optional)
