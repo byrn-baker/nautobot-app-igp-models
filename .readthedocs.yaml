@@ -11,6 +11,6 @@ build:
   tools:
     python: "3.12"
   commands:
-    - pip install -r docs/requirements.txt
-    - pip install -e .
-    - mkdocs build --config-file mkdocs.yml --site-dir $READTHEDOCS_OUTPUT/html
+    - "pip install -r docs/requirements.txt"
+    - "pip install -e ."
+    - "mkdocs build --config-file mkdocs.yml --site-dir $READTHEDOCS_OUTPUT/html"

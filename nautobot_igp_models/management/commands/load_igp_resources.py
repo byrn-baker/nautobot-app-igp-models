@@ -33,9 +33,7 @@ class Command(BaseCommand):
         self.stdout.write("=" * 70 + "\n")
 
         # Get the base directory for the app
-        base_dir = os.path.dirname(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        )
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
         # Load Config Context Schemas
         self.load_config_context_schemas(base_dir, force)
@@ -70,9 +68,7 @@ class Command(BaseCommand):
             schema_file = os.path.join(schemas_dir, schema_def["file"])
 
             if not os.path.exists(schema_file):
-                self.stdout.write(
-                    self.style.WARNING(f"  ⊘ Schema file not found: {schema_file}")
-                )
+                self.stdout.write(self.style.WARNING(f"  ⊘ Schema file not found: {schema_file}"))
                 continue
 
             # Load schema content
@@ -84,9 +80,7 @@ class Command(BaseCommand):
 
             if existing and not force:
                 self.stdout.write(
-                    self.style.WARNING(
-                        f"  ⊘ Schema already exists: {schema_def['name']} (use --force to update)"
-                    )
+                    self.style.WARNING(f"  ⊘ Schema already exists: {schema_def['name']} (use --force to update)")
                 )
                 continue
 
@@ -189,9 +183,7 @@ class Command(BaseCommand):
             template_file = os.path.join(templates_dir, template_def["file"])
 
             if not os.path.exists(template_file):
-                self.stdout.write(
-                    self.style.WARNING(f"  ⊘ Template file not found: {template_file}")
-                )
+                self.stdout.write(self.style.WARNING(f"  ⊘ Template file not found: {template_file}"))
                 continue
 
             # Load template content
@@ -213,9 +205,7 @@ class Command(BaseCommand):
 
             if existing and not force:
                 self.stdout.write(
-                    self.style.WARNING(
-                        f"  ⊘ Template already exists: {template_def['name']} (use --force to update)"
-                    )
+                    self.style.WARNING(f"  ⊘ Template already exists: {template_def['name']} (use --force to update)")
                 )
                 continue
 
