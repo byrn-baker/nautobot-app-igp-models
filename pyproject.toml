@@ -151,6 +151,10 @@ convention = "google"
 "nautobot_igp_models/management/commands/*" = [
     "S104",  # Possible binding to all interfaces (acceptable in demo data)
 ]
+"development/test_app_functionality.py" = [
+    "E402",  # Module level import not at top of file (django.setup() required first)
+    "S104",  # Possible binding to all interfaces (acceptable in test data)
+]
 
 [build-system]
 requires = ["poetry_core>=1.0.0"]

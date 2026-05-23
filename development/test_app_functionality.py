@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 """Test script to validate Nautobot IGP Models app functionality."""
 
-import django
 import os
 import sys
+
+import django
 
 # Setup Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nautobot_config")
@@ -12,9 +13,10 @@ sys.path.insert(0, "/source")
 django.setup()
 
 from django.contrib.contenttypes.models import ContentType
-from nautobot.dcim.models import Device, DeviceType, Location, LocationType, Manufacturer, Interface
+from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer
 from nautobot.extras.models import Role, Status
 from nautobot.ipam.models import IPAddress, Namespace, Prefix
+
 from nautobot_igp_models.models import (
     IGPRoutingInstance,
     ISISConfiguration,
@@ -229,7 +231,6 @@ print()
 # Test 10: Test API availability
 print("✓ Test 10: API Endpoints Check")
 from django.urls import reverse
-from nautobot_igp_models.api import views
 
 api_views = [
     ("IGP Routing Instances", "plugins-api:nautobot_igp_models-api:igproutinginstance-list"),
