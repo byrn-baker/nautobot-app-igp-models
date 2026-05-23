@@ -56,15 +56,13 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("ISIS Configuration Analysis"))
         self.stdout.write("=" * 70 + "\n")
 
-        isis_configs = ISISConfiguration.objects.annotate(
-            interface_count=Count("interface_configurations")
-        ).filter(interface_count__gte=min_interfaces)
+        isis_configs = ISISConfiguration.objects.annotate(interface_count=Count("interface_configurations")).filter(
+            interface_count__gte=min_interfaces
+        )
 
         if not isis_configs.exists():
             self.stdout.write(
-                self.style.WARNING(
-                    f"No ISIS configurations found with at least {min_interfaces} interfaces"
-                )
+                self.style.WARNING(f"No ISIS configurations found with at least {min_interfaces} interfaces")
             )
             return
 
@@ -91,14 +89,10 @@ class Command(BaseCommand):
                         if isis_config.default_metric is None:
                             isis_config.default_metric = most_common_metric
                             isis_config.save()
-                            self.stdout.write(
-                                self.style.SUCCESS("    ✓ Applied default_metric")
-                            )
+                            self.stdout.write(self.style.SUCCESS("    ✓ Applied default_metric"))
 
                             # Clear metric from interfaces that match default
-                            interfaces.filter(metric=most_common_metric).update(
-                                metric=None
-                            )
+                            interfaces.filter(metric=most_common_metric).update(metric=None)
                             self.stdout.write(
                                 self.style.SUCCESS(
                                     f"    ✓ Cleared metric from {count} interfaces (now inherit default)"
@@ -106,9 +100,7 @@ class Command(BaseCommand):
                             )
                         else:
                             self.stdout.write(
-                                self.style.WARNING(
-                                    f"    ⊘ Already has default_metric={isis_config.default_metric}"
-                                )
+                                self.style.WARNING(f"    ⊘ Already has default_metric={isis_config.default_metric}")
                             )
                 else:
                     self.stdout.write(
@@ -119,11 +111,7 @@ class Command(BaseCommand):
 
             # Show current defaults
             if isis_config.default_metric:
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"  Current defaults: metric={isis_config.default_metric}"
-                    )
-                )
+                self.stdout.write(self.style.SUCCESS(f"  Current defaults: metric={isis_config.default_metric}"))
 
     def analyze_ospf(self, apply=False, min_interfaces=2):
         """Analyze OSPF configurations and suggest defaults."""
@@ -131,15 +119,13 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("OSPF Configuration Analysis"))
         self.stdout.write("=" * 70 + "\n")
 
-        ospf_configs = OSPFConfiguration.objects.annotate(
-            interface_count=Count("interface_configurations")
-        ).filter(interface_count__gte=min_interfaces)
+        ospf_configs = OSPFConfiguration.objects.annotate(interface_count=Count("interface_configurations")).filter(
+            interface_count__gte=min_interfaces
+        )
 
         if not ospf_configs.exists():
             self.stdout.write(
-                self.style.WARNING(
-                    f"No OSPF configurations found with at least {min_interfaces} interfaces"
-                )
+                self.style.WARNING(f"No OSPF configurations found with at least {min_interfaces} interfaces")
             )
             return
 
@@ -167,22 +153,16 @@ class Command(BaseCommand):
                         if ospf_config.default_cost is None:
                             ospf_config.default_cost = most_common_cost
                             ospf_config.save()
-                            self.stdout.write(
-                                self.style.SUCCESS("    ✓ Applied default_cost")
-                            )
+                            self.stdout.write(self.style.SUCCESS("    ✓ Applied default_cost"))
 
                             # Clear cost from interfaces that match default
                             interfaces.filter(cost=most_common_cost).update(cost=None)
                             self.stdout.write(
-                                self.style.SUCCESS(
-                                    f"    ✓ Cleared cost from {count} interfaces (now inherit default)"
-                                )
+                                self.style.SUCCESS(f"    ✓ Cleared cost from {count} interfaces (now inherit default)")
                             )
                         else:
                             self.stdout.write(
-                                self.style.WARNING(
-                                    f"    ⊘ Already has default_cost={ospf_config.default_cost}"
-                                )
+                                self.style.WARNING(f"    ⊘ Already has default_cost={ospf_config.default_cost}")
                             )
                 else:
                     self.stdout.write(
@@ -193,23 +173,13 @@ class Command(BaseCommand):
 
             # Show current defaults
             if ospf_config.default_cost:
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"  Current defaults: cost={ospf_config.default_cost}"
-                    )
-                )
+                self.stdout.write(self.style.SUCCESS(f"  Current defaults: cost={ospf_config.default_cost}"))
 
         self.stdout.write("\n" + "=" * 70)
         if not apply:
             self.stdout.write(
-                self.style.WARNING(
-                    "\nℹ  This was a dry-run. Use --apply to actually update configurations."
-                )
+                self.style.WARNING("\nℹ  This was a dry-run. Use --apply to actually update configurations.")
             )
         else:
-            self.stdout.write(
-                self.style.SUCCESS(
-                    "\n✓ Analysis complete. Defaults applied where appropriate."
-                )
-            )
+            self.stdout.write(self.style.SUCCESS("\n✓ Analysis complete. Defaults applied where appropriate."))
         self.stdout.write("=" * 70 + "\n")

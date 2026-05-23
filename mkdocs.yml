@@ -3,7 +3,7 @@ dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/docs"
 site_dir: "nautobot_igp_models/static/nautobot_igp_models/docs"
 site_name: "Nautobot IGP Models Documentation"
-site_url: "https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/"
+site_url: "https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/"
 repo_url: "https://github.com/byrn-baker/nautobot-app-igp-models"
 copyright: "Copyright &copy; The Authors"
 theme:
@@ -91,6 +91,7 @@ markdown_extensions:
   - "footnotes"
 plugins:
   - "search"
+  - "autorefs"
   - "mkdocstrings":
       default_handler: "python"
       handlers:

@@ -38,7 +38,7 @@ The app integrates seamlessly with Nautobot's existing device and interface mode
 - Validation of routing design consistency across the network
 - Integration with monitoring systems for configuration drift detection
 
-More details can be found in the [Using the App](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/user/app_use_cases/) documentation.
+More details can be found in the [Using the App](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/user/app_use_cases/) documentation.
 
 ## Try it out!
 
@@ -63,22 +63,22 @@ The demo data creates a realistic 4-router network topology with ISIS and OSPF c
 
 ## Documentation
 
-Full documentation for this App can be found over on the [Nautobot Docs](https://docs.nautobot.com) website:
+Full documentation for this App can be found on the [Read the Docs](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/) website:
 
-- [User Guide](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/user/app_overview/) - Overview, Using the App, Getting Started.
-- [Administrator Guide](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/admin/install/) - How to Install, Configure, Upgrade, or Uninstall the App.
-- [Developer Guide](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/dev/contributing/) - Extending the App, Code Reference, Contribution Guide.
-- [Release Notes / Changelog](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/admin/release_notes/).
-- [Frequently Asked Questions](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/user/faq/).
+- [User Guide](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/user/app_overview/) - Overview, Using the App, Getting Started.
+- [Administrator Guide](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/admin/install/) - How to Install, Configure, Upgrade, or Uninstall the App.
+- [Developer Guide](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/dev/contributing/) - Extending the App, Code Reference, Contribution Guide.
+- [Release Notes / Changelog](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/admin/release_notes/).
+- [Frequently Asked Questions](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/user/faq/).
 
 ### Contributing to the Documentation
 
 You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/byrn-baker/nautobot-app-igp-models/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
 
-If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/). A container hosting the documentation can be started using the `invoke` commands (details in the [Development Environment Guide](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/dev/dev_environment/#docker-development-environment)) on [http://localhost:8001](http://localhost:8001). Using this container, as your changes to the documentation are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
+If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/). A container hosting the documentation can be started using the `invoke` commands (details in the [Development Environment Guide](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/dev/dev_environment/#docker-development-environment)) on [http://localhost:8001](http://localhost:8001). Using this container, as your changes to the documentation are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
 
 Any PRs with fixes or improvements are very welcome!
 
 ## Questions
 
-For any questions or comments, please check the [FAQ](https://docs.nautobot.com/projects/nautobot-igp-models/en/latest/user/faq/) first. Feel free to also swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
+For any questions or comments, please check the [FAQ](https://byrn-baker-nautobot-app-igp-models.readthedocs-hosted.com/en/latest/user/faq/) first. Feel free to also swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
