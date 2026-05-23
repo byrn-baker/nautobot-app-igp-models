@@ -270,7 +270,7 @@ class ISISInterfaceConfigurationForm(NautobotModelForm):
 
     class Meta:
         model = models.ISISInterfaceConfiguration
-        fields = ("name", "isis_config", "device", "interface", "circuit_type", "metric", "status")
+        fields = ("name", "isis_config", "device", "interface", "circuit_type", "network_type", "metric", "status")
         widgets = {"circuit_type": StaticSelect2()}
 
     def __init__(self, *args, **kwargs):
@@ -320,12 +320,18 @@ class ISISInterfaceConfigurationFilterForm(NautobotFilterForm):
         widget=forms.SelectMultiple(attrs={"class": "form-control"}),
     )
 
+    network_type = forms.MultipleChoiceField(
+        choices=models.ISISInterfaceConfiguration.NETWORK_TYPE_CHOICES,
+        required=False,
+        widget=forms.SelectMultiple(attrs={"class": "form-control"}),
+    )
+
     metric = forms.IntegerField(
         required=False, label="Metric", widget=forms.NumberInput(attrs={"class": "form-control"})
     )
 
     class Meta:
-        fields = ["isis_config_name", "interface", "circuit_type", "metric", "status"]
+        fields = ["isis_config_name", "interface", "circuit_type", "network_type", "metric", "status"]
 
 
 class ISISInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
@@ -347,10 +353,15 @@ class ISISInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
         widget=StaticSelect2(),
         label="Circuit Type",
     )
+    network_type = forms.ChoiceField(
+        choices=[("", "---------")] + models.ISISInterfaceConfiguration.NETWORK_TYPE_CHOICES,
+        required=False,
+        label="Network Type",
+    )
     metric = forms.IntegerField(required=False, label="Metric")
 
     class Meta:
-        nullable_fields = ("metric", "status")
+        nullable_fields = ("network_type", "metric", "status")
 
 
 # OSPFConfiguration Forms
@@ -415,11 +426,16 @@ class OSPFInterfaceConfigurationForm(NautobotModelForm):
         query_params={"device_id": "$ospf_config__instance__device"},
     )
     area = forms.CharField(required=False, label="Area")
+    network_type = forms.ChoiceField(
+        choices=[("", "---------")] + models.OSPFInterfaceConfiguration.NETWORK_TYPE_CHOICES,
+        required=False,
+        label="Network Type",
+    )
     cost = forms.IntegerField(required=False, label="Cost")
 
     class Meta:
         model = models.OSPFInterfaceConfiguration
-        fields = ("name", "ospf_config", "interface", "area", "cost", "status")
+        fields = ("name", "ospf_config", "interface", "area", "network_type", "cost", "status")
 
 
 class OSPFInterfaceConfigurationFilterForm(NautobotFilterForm):
@@ -434,6 +450,11 @@ class OSPFInterfaceConfigurationFilterForm(NautobotFilterForm):
         query_params={"device_id": "$ospf_config__instance__device"},
     )
     area = forms.CharField(required=False, label="Area")
+    network_type = forms.ChoiceField(
+        choices=[("", "---------")] + models.OSPFInterfaceConfiguration.NETWORK_TYPE_CHOICES,
+        required=False,
+        label="Network Type",
+    )
     cost = forms.IntegerField(required=False, label="Cost")
 
 
@@ -451,7 +472,12 @@ class OSPFInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
         query_params={"device_id": "$ospf_config__instance__device"},
     )
     area = forms.CharField(required=False, label="Area")
+    network_type = forms.ChoiceField(
+        choices=[("", "---------")] + models.OSPFInterfaceConfiguration.NETWORK_TYPE_CHOICES,
+        required=False,
+        label="Network Type",
+    )
     cost = forms.IntegerField(required=False, label="Cost")
 
     class Meta:
-        nullable_fields = ("area", "cost", "status")
+        nullable_fields = ("area", "network_type", "cost", "status")
