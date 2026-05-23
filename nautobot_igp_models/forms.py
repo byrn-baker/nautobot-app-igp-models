@@ -24,7 +24,7 @@ class IGPRoutingInstanceForm(NautobotModelForm):  # pylint: disable=too-many-anc
 
     device = DynamicModelChoiceField(queryset=Device.objects.all(), label="Device")
     router_id = DynamicModelChoiceField(
-        queryset=IPAddress.objects.all(), label="Router ID", query_params={"device_id": "$device"}
+        queryset=IPAddress.objects.all(), required=False, label="Router ID", query_params={"device_id": "$device"}
     )
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
 

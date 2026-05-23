@@ -34,6 +34,7 @@ class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "vrf": self.vrfs["management"].pk,
             "isis_area": "49.0099",
             "status": self.statuses["active"].pk,
+            "object_note": "",
         }
 
     def get_csv_data(self):
@@ -72,6 +73,7 @@ class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "instance": self.igp_instances["isis_router1"].pk,
             "system_id": "49.0001.1234.5678.9012.00",
             "status": self.statuses["active"].pk,
+            "object_note": "",
         }
 
     def get_csv_data(self):
@@ -114,6 +116,7 @@ class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
             "circuit_type": "L2",
             "metric": 10,
             "status": self.statuses["active"].pk,
+            "object_note": "",
         }
 
     def get_csv_data(self):
@@ -150,6 +153,7 @@ class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "instance": self.igp_instances["ospf_router1"].pk,
             "process_id": 100,
             "status": self.statuses["active"].pk,
+            "object_note": "",
         }
 
     def get_csv_data(self):
@@ -190,6 +194,7 @@ class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
             "area": "0.0.0.0",
             "cost": 10,
             "status": self.statuses["active"].pk,
+            "object_note": "",
         }
 
     def get_csv_data(self):
