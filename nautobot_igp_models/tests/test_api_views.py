@@ -11,6 +11,7 @@ class IGPRoutingInstanceAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the API viewsets for IGPRoutingInstance."""
 
     model = models.IGPRoutingInstance
+    choices_fields = ["protocol"]
 
     @classmethod
     def setUpTestData(cls):
@@ -105,7 +106,7 @@ class ISISConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     @property
     def bulk_update_data(self):
         """Return data for bulk update testing."""
-        return {}  # ISIS config doesn't have many bulk-updateable fields
+        return {"system_id": "49.0001.9999.8888.7777.00"}
 
 
 class ISISInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -113,6 +114,7 @@ class ISISInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the API viewsets for ISISInterfaceConfiguration."""
 
     model = models.ISISInterfaceConfiguration
+    choices_fields = ["circuit_type", "network_type"]
 
     @classmethod
     def setUpTestData(cls):
@@ -203,7 +205,7 @@ class OSPFConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     @property
     def bulk_update_data(self):
         """Return data for bulk update testing."""
-        return {}  # OSPF config doesn't have many bulk-updateable fields
+        return {"process_id": 999}
 
 
 class OSPFInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -211,6 +213,7 @@ class OSPFInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the API viewsets for OSPFInterfaceConfiguration."""
 
     model = models.OSPFInterfaceConfiguration
+    choices_fields = ["network_type"]
 
     @classmethod
     def setUpTestData(cls):

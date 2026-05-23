@@ -311,3 +311,4 @@ public
 # Test outputs
 test_output*.txt
 .kiro/
+test-results.txt

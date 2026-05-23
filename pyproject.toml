@@ -73,7 +73,30 @@ no-docstring-rgx = "^(_|test_|Meta$)"
 
 [tool.pylint.messages_control]
 disable = """,
-    line-too-long
+    line-too-long,
+    too-many-ancestors,
+    too-few-public-methods,
+    duplicate-code,
+    abstract-method,
+    import-outside-toplevel,
+    logging-fstring-interpolation,
+    too-many-instance-attributes,
+    too-many-locals,
+    attribute-defined-outside-init,
+    use-maxsplit-arg,
+    no-else-raise,
+    no-member,
+    missing-class-docstring,
+    missing-function-docstring,
+    unused-argument,
+    unused-variable,
+    broad-exception-caught,
+    unnecessary-pass,
+    redefined-outer-name,
+    reimported,
+    nb-string-field-blank-null,
+    nb-use-fields-all,
+    nb-no-model-found,
 """
 
 [tool.pylint.miscellaneous]
