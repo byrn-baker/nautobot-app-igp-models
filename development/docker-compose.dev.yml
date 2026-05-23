@@ -5,9 +5,9 @@
 ---
 services:
   nautobot:
-    command: "nautobot-server runserver 0.0.0.0:8080"
+    command: "nautobot-server runserver 0.0.0.0:8082"
     ports:
-      - "8080:8080"
+      - "8082:8082"
     volumes:
       - "./nautobot_config.py:/opt/nautobot/nautobot_config.py"
       - "../:/source"

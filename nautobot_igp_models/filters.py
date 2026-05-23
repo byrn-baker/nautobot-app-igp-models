@@ -62,7 +62,7 @@ class ISISInterfaceConfigurationFilterSet(NautobotFilterSet, StatusModelFilterSe
 
     class Meta:
         model = models.ISISInterfaceConfiguration
-        fields = ["isis_config", "interface", "circuit_type", "metric", "status"]
+        fields = ["isis_config", "interface", "circuit_type", "network_type", "metric", "status"]
 
 
 class OSPFConfigurationFilterSet(NautobotFilterSet):
@@ -85,8 +85,9 @@ class OSPFInterfaceConfigurationFilterSet(NautobotFilterSet):
     ospf_config_name = django_filters.CharFilter(lookup_expr="exact", label="OSPF Configuration")
     interface = django_filters.CharFilter(lookup_expr="exact", label="Interface")
     area = django_filters.CharFilter(lookup_expr="exact", label="OSPF Area")
+    network_type = django_filters.CharFilter(lookup_expr="exact", label="Network Type")
     cost = django_filters.NumberFilter(lookup_expr="exact", label="Cost")
 
     class Meta:
         model = models.OSPFInterfaceConfiguration
-        fields = ["id", "ospf_config_name", "interface", "area", "cost", "status"]
+        fields = ["id", "ospf_config_name", "interface", "area", "network_type", "cost", "status"]

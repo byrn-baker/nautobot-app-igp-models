@@ -225,6 +225,11 @@ class ISISConfiguration(PrimaryModel):
 class ISISInterfaceConfiguration(PrimaryModel):
     """ISIS interface-level configuration model."""
 
+    NETWORK_TYPE_CHOICES = [
+        ("point-to-point", "Point-to-Point"),
+        ("point-to-multipoint", "Point-to-Multipoint"),
+    ]
+
     name = models.CharField(max_length=100)
 
     isis_config = models.ForeignKey(
@@ -244,6 +249,13 @@ class ISISInterfaceConfiguration(PrimaryModel):
         choices=[("L1", "Level-1"), ("L2", "Level-2"), ("L1L2", "Level-1-2")],
         default="L1L2",
         help_text="ISIS circuit type for this interface.",
+    )
+    network_type = models.CharField(
+        max_length=20,
+        choices=NETWORK_TYPE_CHOICES,
+        blank=True,
+        default="",
+        help_text="ISIS network type for this interface.",
     )
     metric = models.PositiveIntegerField(
         blank=True,
@@ -412,6 +424,13 @@ class OSPFConfiguration(PrimaryModel):
 class OSPFInterfaceConfiguration(PrimaryModel):
     """OSPF interface-level configuration model."""
 
+    NETWORK_TYPE_CHOICES = [
+        ("broadcast", "Broadcast"),
+        ("point-to-point", "Point-to-Point"),
+        ("point-to-multipoint", "Point-to-Multipoint"),
+        ("non-broadcast", "Non-Broadcast (NBMA)"),
+    ]
+
     name = models.CharField(max_length=100)
 
     ospf_config = models.ForeignKey(
@@ -419,6 +438,13 @@ class OSPFInterfaceConfiguration(PrimaryModel):
     )
     interface = models.ForeignKey(Interface, on_delete=models.CASCADE, related_name="ospf_configurations")
     area = models.CharField(max_length=15, help_text="OSPF Area for this interface (e.g., 0.0.0.0)")
+    network_type = models.CharField(
+        max_length=20,
+        choices=NETWORK_TYPE_CHOICES,
+        blank=True,
+        default="",
+        help_text="OSPF network type for this interface.",
+    )
     cost = models.PositiveIntegerField(
         blank=True,
         null=True,
