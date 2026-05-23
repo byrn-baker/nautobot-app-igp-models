@@ -53,17 +53,12 @@ status_active.content_types.add(ct_device, ct_igp)
 print(f"  - Status: {status_active.name}")
 
 # Create manufacturer
-manufacturer, _ = Manufacturer.objects.get_or_create(
-    name="Cisco",
-    defaults={"description": "Cisco Systems"}
-)
+manufacturer, _ = Manufacturer.objects.get_or_create(name="Cisco", defaults={"description": "Cisco Systems"})
 print(f"  - Manufacturer: {manufacturer.name}")
 
 # Create device type
 device_type, _ = DeviceType.objects.get_or_create(
-    model="CSR1000v",
-    manufacturer=manufacturer,
-    defaults={"comments": "Cisco Cloud Services Router"}
+    model="CSR1000v", manufacturer=manufacturer, defaults={"comments": "Cisco Cloud Services Router"}
 )
 print(f"  - DeviceType: {device_type.model}")
 
@@ -75,17 +70,12 @@ location_type.content_types.add(ct_device)
 
 # Create location
 location, _ = Location.objects.get_or_create(
-    name="TestSite",
-    location_type=location_type,
-    defaults={"status": status_active}
+    name="TestSite", location_type=location_type, defaults={"status": status_active}
 )
 print(f"  - Location: {location.name}")
 
 # Create role
-role, _ = Role.objects.get_or_create(
-    name="Router",
-    defaults={"description": "Network Router"}
-)
+role, _ = Role.objects.get_or_create(name="Router", defaults={"description": "Network Router"})
 role.content_types.add(ct_device)
 print(f"  - Role: {role.name}")
 
@@ -97,30 +87,24 @@ device, created = Device.objects.get_or_create(
         "role": role,
         "location": location,
         "status": status_active,
-    }
+    },
 )
 print(f"  - Device: {device.name} ({'created' if created else 'existing'})")
 
 # Create interface
 interface, created = Interface.objects.get_or_create(
-    device=device,
-    name="Loopback0",
-    defaults={"type": "virtual", "status": status_active}
+    device=device, name="Loopback0", defaults={"type": "virtual", "status": status_active}
 )
 print(f"  - Interface: {interface.name} ({'created' if created else 'existing'})")
 
 # Create parent prefix for IP address
 parent_prefix, _ = Prefix.objects.get_or_create(
-    prefix="10.0.0.0/24",
-    namespace=namespace,
-    defaults={"status": status_active, "type": "network"}
+    prefix="10.0.0.0/24", namespace=namespace, defaults={"status": status_active, "type": "network"}
 )
 
 # Create IP address
 ip_address, created = IPAddress.objects.get_or_create(
-    address="10.0.0.1/32",
-    parent=parent_prefix,
-    defaults={"status": status_active, "type": "host"}
+    address="10.0.0.1/32", parent=parent_prefix, defaults={"status": status_active, "type": "host"}
 )
 print(f"  - IPAddress: {ip_address.address} ({'created' if created else 'existing'})")
 print()
@@ -136,7 +120,7 @@ try:
             "router_id": ip_address,
             "isis_area": "49.0001",
             "status": status_active,
-        }
+        },
     )
     print(f"  - IGP Instance: {igp_instance.name} ({'created' if created else 'existing'})")
     print(f"  - Protocol: {igp_instance.protocol}")
@@ -151,9 +135,7 @@ print()
 print("✓ Test 4: Creating ISIS Configuration")
 try:
     isis_config, created = ISISConfiguration.objects.get_or_create(
-        name="ISIS-Core",
-        instance=igp_instance,
-        defaults={"status": status_active}
+        name="ISIS-Core", instance=igp_instance, defaults={"status": status_active}
     )
     print(f"  - ISIS Config: {isis_config.name} ({'created' if created else 'existing'})")
     print(f"  - System ID (NET): {isis_config.system_id}")
@@ -174,7 +156,7 @@ try:
             "circuit_type": "L1L2",
             "metric": 10,
             "status": status_active,
-        }
+        },
     )
     print(f"  - ISIS Interface Config: {isis_int_config.name} ({'created' if created else 'existing'})")
     print(f"  - Interface: {isis_int_config.interface.name}")
@@ -194,7 +176,7 @@ try:
         defaults={
             "router_id": ip_address,
             "status": status_active,
-        }
+        },
     )
     print(f"  - IGP Instance: {ospf_instance.name} ({'created' if created else 'existing'})")
     print(f"  - Protocol: {ospf_instance.protocol}")
@@ -207,9 +189,7 @@ print()
 print("✓ Test 7: Creating OSPF Configuration")
 try:
     ospf_config, created = OSPFConfiguration.objects.get_or_create(
-        name="OSPF-Core",
-        instance=ospf_instance,
-        defaults={"process_id": 1, "status": status_active}
+        name="OSPF-Core", instance=ospf_instance, defaults={"process_id": 1, "status": status_active}
     )
     print(f"  - OSPF Config: {ospf_config.name} ({'created' if created else 'existing'})")
     print(f"  - Process ID: {ospf_config.process_id}")
@@ -228,7 +208,7 @@ try:
             "area": "0.0.0.0",
             "cost": 1,
             "status": status_active,
-        }
+        },
     )
     print(f"  - OSPF Interface Config: {ospf_int_config.name} ({'created' if created else 'existing'})")
     print(f"  - Interface: {ospf_int_config.interface.name}")

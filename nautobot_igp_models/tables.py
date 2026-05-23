@@ -64,6 +64,7 @@ class ISISInterfaceConfigurationTable(StatusTableMixin, BaseTable):
     isis_config = tables.LinkColumn()
     interface = tables.LinkColumn()
     circuit_type = tables.Column()
+    network_type = tables.Column(verbose_name="Network Type")
     metric = tables.Column()
     actions = ButtonsColumn(
         model=models.ISISInterfaceConfiguration,
@@ -72,8 +73,17 @@ class ISISInterfaceConfigurationTable(StatusTableMixin, BaseTable):
 
     class Meta(BaseTable.Meta):
         model = models.ISISInterfaceConfiguration
-        fields = ("pk", "isis_config", "interface", "circuit_type", "metric", "status", "actions")
-        default_columns = ("pk", "isis_config", "interface", "circuit_type", "metric", "status", "actions")
+        fields = ("pk", "isis_config", "interface", "circuit_type", "network_type", "metric", "status", "actions")
+        default_columns = (
+            "pk",
+            "isis_config",
+            "interface",
+            "circuit_type",
+            "network_type",
+            "metric",
+            "status",
+            "actions",
+        )
 
 
 class OSPFConfigurationTable(StatusTableMixin, BaseTable):
@@ -100,6 +110,7 @@ class OSPFInterfaceConfigurationTable(StatusTableMixin, BaseTable):
     ospf_config = tables.LinkColumn()
     interface = tables.LinkColumn()
     area = tables.Column()
+    network_type = tables.Column(verbose_name="Network Type")
     cost = tables.Column()
     actions = ButtonsColumn(
         model=models.OSPFInterfaceConfiguration,
@@ -108,5 +119,5 @@ class OSPFInterfaceConfigurationTable(StatusTableMixin, BaseTable):
 
     class Meta(BaseTable.Meta):
         model = models.OSPFInterfaceConfiguration
-        fields = ("pk", "ospf_config", "interface", "area", "cost", "status", "actions")
-        default_columns = ("pk", "ospf_config", "interface", "area", "cost", "status", "actions")
+        fields = ("pk", "ospf_config", "interface", "area", "network_type", "cost", "status", "actions")
+        default_columns = ("pk", "ospf_config", "interface", "area", "network_type", "cost", "status", "actions")
