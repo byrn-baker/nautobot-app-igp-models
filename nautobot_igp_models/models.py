@@ -254,7 +254,6 @@ class ISISInterfaceConfiguration(PrimaryModel):
         max_length=20,
         choices=NETWORK_TYPE_CHOICES,
         blank=True,
-        default="",
         help_text="ISIS network type for this interface.",
     )
     metric = models.PositiveIntegerField(
@@ -442,7 +441,6 @@ class OSPFInterfaceConfiguration(PrimaryModel):
         max_length=20,
         choices=NETWORK_TYPE_CHOICES,
         blank=True,
-        default="",
         help_text="OSPF network type for this interface.",
     )
     cost = models.PositiveIntegerField(
