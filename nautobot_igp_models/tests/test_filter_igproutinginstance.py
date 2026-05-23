@@ -19,10 +19,10 @@ class IGPRoutingInstanceFilterTestCase(TestCase):
 
     def test_q_search_name(self):
         """Test using Q search with name of IGPRoutingInstance."""
-        params = {"q": "Test One"}
+        params = {"q": "ISIS-router1"}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
 
     def test_q_invalid(self):
         """Test using invalid Q search for IGPRoutingInstance."""
-        params = {"q": "test-five"}
+        params = {"q": "nonexistent-instance-xyz"}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 0)

@@ -40,7 +40,7 @@ class ISISInterfaceConfigurationFilterTestCase(TestCase):
         isis_int_configs = create_isis_interface_configurations()
 
         filterset = ISISInterfaceConfigurationFilterSet(
-            data={"isis_config": [isis_int_configs["router1_ge1"].isis_config.pk]},
+            data={"isis_config": isis_int_configs["router1_ge1"].isis_config.pk},
             queryset=ISISInterfaceConfiguration.objects.all(),
         )
 
@@ -52,7 +52,7 @@ class ISISInterfaceConfigurationFilterTestCase(TestCase):
         isis_int_configs = create_isis_interface_configurations()
 
         filterset = ISISInterfaceConfigurationFilterSet(
-            data={"interface": [isis_int_configs["router1_ge1"].interface.pk]},
+            data={"interface": isis_int_configs["router1_ge1"].interface.pk},
             queryset=ISISInterfaceConfiguration.objects.all(),
         )
 
@@ -102,7 +102,7 @@ class ISISInterfaceConfigurationFilterTestCase(TestCase):
         isis_int_configs = create_isis_interface_configurations()
 
         filterset = ISISInterfaceConfigurationFilterSet(
-            data={"device": [isis_int_configs["router1_ge1"].device.pk]},
+            data={"device": isis_int_configs["router1_ge1"].device.pk},
             queryset=ISISInterfaceConfiguration.objects.all(),
         )
 

@@ -47,8 +47,8 @@ class OSPFConfigurationFormTestCase(TestCase):
         form_data = {
             "name": "Minimal-OSPF-Form",
             "instance": igp_instances["ospf_router3"].pk,
+            "process_id": 1,
             "status": statuses["active"].pk,
-            # process_id will use default
         }
 
         form = OSPFConfigurationForm(data=form_data)

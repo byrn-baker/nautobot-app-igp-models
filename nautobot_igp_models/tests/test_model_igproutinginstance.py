@@ -25,7 +25,7 @@ class TestIGPRoutingInstance(TestCase):
         )
         self.assertEqual(igproutinginstance.name, "Development")
         self.assertEqual(igproutinginstance.description, "")
-        self.assertEqual(str(igproutinginstance), "Development")
+        self.assertEqual(str(igproutinginstance), "ISIS on router1")
 
     def test_create_igproutinginstance_all_fields_success(self):
         """Create IGPRoutingInstance with all fields."""

@@ -108,8 +108,9 @@ class OSPFInterfaceConfigurationModelTestCase(TestCase):
             status=statuses["active"],
         )
 
-        # Check if cost has a value (should default to 1 based on model definition)
-        self.assertIsNotNone(ospf_int_config.cost)
+        # cost is nullable - when not specified it's None
+        # Use get_effective_cost() for the inherited value
+        self.assertIsNone(ospf_int_config.cost)
 
     def test_ospf_interface_str_method(self):
         """Test string representation of OSPFInterfaceConfiguration."""
@@ -118,8 +119,9 @@ class OSPFInterfaceConfigurationModelTestCase(TestCase):
         ospf_int_config = ospf_int_configs["router1_ge1"]
         str_repr = str(ospf_int_config)
 
-        # Should contain the name
-        self.assertIn(ospf_int_config.name, str_repr)
+        # __str__ returns "OSPF Area {area} on {interface}"
+        self.assertIn(ospf_int_config.area, str_repr)
+        self.assertIn(str(ospf_int_config.interface), str_repr)
 
     def test_ospf_interface_update(self):
         """Test updating an existing OSPFInterfaceConfiguration."""

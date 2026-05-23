@@ -105,8 +105,9 @@ class OSPFConfigurationModelTestCase(TestCase):
         ospf_config = ospf_configs["router1"]
         str_repr = str(ospf_config)
 
-        # Should contain the name
-        self.assertIn(ospf_config.name, str_repr)
+        # __str__ returns "OSPF {process_id} on {device}"
+        self.assertIn("OSPF", str_repr)
+        self.assertIn(str(ospf_config.process_id), str_repr)
 
     def test_ospfconfiguration_limit_choices_to_ospf(self):
         """Test that only OSPF protocol instances are allowed."""

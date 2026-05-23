@@ -118,8 +118,9 @@ class ISISInterfaceConfigurationModelTestCase(TestCase):
             status=statuses["active"],
         )
 
-        # Check if metric has a value (depends on model definition)
-        self.assertIsNotNone(isis_int_config.metric)
+        # metric is nullable - when not specified it's None
+        # Use get_effective_metric() for the inherited value
+        self.assertIsNone(isis_int_config.metric)
 
     def test_isis_interface_str_method(self):
         """Test string representation of ISISInterfaceConfiguration."""
@@ -128,8 +129,9 @@ class ISISInterfaceConfigurationModelTestCase(TestCase):
         isis_int_config = isis_int_configs["router1_ge1"]
         str_repr = str(isis_int_config)
 
-        # Should contain the name
-        self.assertIn(isis_int_config.name, str_repr)
+        # __str__ returns "ISIS {circuit_type} on {interface}"
+        self.assertIn(isis_int_config.circuit_type, str_repr)
+        self.assertIn(str(isis_int_config.interface), str_repr)
 
     def test_isis_interface_device_consistency(self):
         """Test that interface belongs to the correct device."""

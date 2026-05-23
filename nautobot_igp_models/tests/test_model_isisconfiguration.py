@@ -64,7 +64,7 @@ class ISISConfigurationModelTestCase(TestCase):
         # 49.0001.0010.0000.0001.00
         net_parts = isis_config.system_id.split(".")
 
-        self.assertEqual(len(net_parts), 5)
+        self.assertEqual(len(net_parts), 6)
         self.assertEqual(net_parts[0], "49")
         self.assertEqual(net_parts[1], "0001")
         self.assertEqual(net_parts[-1], "00")  # NSEL
@@ -128,8 +128,8 @@ class ISISConfigurationModelTestCase(TestCase):
         self.assertIsNotNone(generated_net)
         self.assertIn("49.0001", generated_net)
         self.assertTrue(generated_net.endswith(".00"))
-        # Should have 5 parts separated by dots
-        self.assertEqual(len(generated_net.split(".")), 5)
+        # Should have 6 parts separated by dots (area.system_id.nsel)
+        self.assertEqual(len(generated_net.split(".")), 6)
 
     def test_isisconfiguration_net_generation_without_router_id(self):
         """Test NET generation fails gracefully without router_id."""
