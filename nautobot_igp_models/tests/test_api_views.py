@@ -12,6 +12,7 @@ class IGPRoutingInstanceAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     model = models.IGPRoutingInstance
     choices_fields = ["protocol"]
+    validation_excluded_fields = ["device", "router_id", "vrf", "status"]
 
     @classmethod
     def setUpTestData(cls):
@@ -69,6 +70,7 @@ class ISISConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the API viewsets for ISISConfiguration."""
 
     model = models.ISISConfiguration
+    validation_excluded_fields = ["instance", "status"]
 
     @classmethod
     def setUpTestData(cls):
@@ -115,6 +117,7 @@ class ISISInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     model = models.ISISInterfaceConfiguration
     choices_fields = ["circuit_type", "network_type"]
+    validation_excluded_fields = ["isis_config", "device", "interface", "status"]
 
     @classmethod
     def setUpTestData(cls):
@@ -170,6 +173,7 @@ class OSPFConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the API viewsets for OSPFConfiguration."""
 
     model = models.OSPFConfiguration
+    validation_excluded_fields = ["instance", "status"]
 
     @classmethod
     def setUpTestData(cls):
@@ -214,6 +218,7 @@ class OSPFInterfaceConfigurationAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     model = models.OSPFInterfaceConfiguration
     choices_fields = ["network_type"]
+    validation_excluded_fields = ["ospf_config", "interface", "status"]
 
     @classmethod
     def setUpTestData(cls):

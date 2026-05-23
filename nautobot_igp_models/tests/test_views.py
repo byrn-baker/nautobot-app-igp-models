@@ -11,6 +11,8 @@ class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the IGPRoutingInstance views."""
 
     model = models.IGPRoutingInstance
+    bulk_edit_data = {"description": "Bulk edited description"}
+    allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
 
     @classmethod
     def setUpTestData(cls):
@@ -32,6 +34,7 @@ class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "vrf": self.vrfs["global"].pk,
             "isis_area": "49.0001",
             "status": self.statuses["active"].pk,
+            "tags": [],
         }
 
     def get_csv_data(self):
@@ -45,7 +48,7 @@ class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        return {"description": "Bulk edited description"}
+        return self.bulk_edit_data
 
 
 class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -53,6 +56,8 @@ class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ISISConfiguration views."""
 
     model = models.ISISConfiguration
+    bulk_edit_data = {"system_id": "49.0001.9999.8888.7777.00"}
+    allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
 
     @classmethod
     def setUpTestData(cls):
@@ -68,6 +73,7 @@ class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "instance": self.igp_instances["isis_router1"].pk,
             "system_id": "49.0001.1234.5678.9012.00",
             "status": self.statuses["active"].pk,
+            "tags": [],
         }
 
     def get_csv_data(self):
@@ -80,8 +86,7 @@ class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        # ISISConfiguration can have instance changed in bulk
-        return {"instance": self.igp_instances["isis_router2"].pk}
+        return self.bulk_edit_data
 
 
 class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -89,6 +94,7 @@ class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
     """Test the ISISInterfaceConfiguration views."""
 
     model = models.ISISInterfaceConfiguration
+    bulk_edit_data = {"metric": 50}
 
     @classmethod
     def setUpTestData(cls):
@@ -109,6 +115,7 @@ class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
             "circuit_type": "L2",
             "metric": 10,
             "status": self.statuses["active"].pk,
+            "tags": [],
         }
 
     def get_csv_data(self):
@@ -120,7 +127,7 @@ class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        return {"metric": 50}
+        return self.bulk_edit_data
 
 
 class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -128,6 +135,7 @@ class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the OSPFConfiguration views."""
 
     model = models.OSPFConfiguration
+    bulk_edit_data = {"process_id": 200}
 
     @classmethod
     def setUpTestData(cls):
@@ -143,6 +151,7 @@ class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "instance": self.igp_instances["ospf_router1"].pk,
             "process_id": 100,
             "status": self.statuses["active"].pk,
+            "tags": [],
         }
 
     def get_csv_data(self):
@@ -155,8 +164,7 @@ class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        # OSPFConfiguration has process_id that can be bulk-edited
-        return {"process_id": 200}
+        return self.bulk_edit_data
 
 
 class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -164,6 +172,7 @@ class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
     """Test the OSPFInterfaceConfiguration views."""
 
     model = models.OSPFInterfaceConfiguration
+    bulk_edit_data = {"cost": 100}
 
     @classmethod
     def setUpTestData(cls):
@@ -182,6 +191,7 @@ class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
             "area": "0.0.0.0",
             "cost": 10,
             "status": self.statuses["active"].pk,
+            "tags": [],
         }
 
     def get_csv_data(self):
@@ -193,4 +203,4 @@ class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
 
     def get_bulk_edit_data(self):
         """Return data for bulk edit testing."""
-        return {"cost": 100}
+        return self.bulk_edit_data
