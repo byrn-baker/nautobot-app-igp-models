@@ -44,6 +44,7 @@ class ISISConfigurationTable(StatusTableMixin, BaseTable):
     """Table for displaying ISISConfiguration objects."""
 
     pk = ToggleColumn()
+    name = tables.Column(linkify=True)
     instance = tables.LinkColumn()
     system_id = tables.Column(verbose_name="System ID")
     actions = ButtonsColumn(
@@ -53,14 +54,15 @@ class ISISConfigurationTable(StatusTableMixin, BaseTable):
 
     class Meta(BaseTable.Meta):
         model = models.ISISConfiguration
-        fields = ("pk", "instance", "system_id", "status", "actions")
-        default_columns = ("pk", "instance", "system_id", "status", "actions")
+        fields = ("pk", "name", "instance", "system_id", "status", "actions")
+        default_columns = ("pk", "name", "instance", "system_id", "status", "actions")
 
 
 class ISISInterfaceConfigurationTable(StatusTableMixin, BaseTable):
     """Table for displaying ISISInterfaceConfiguration objects."""
 
     pk = ToggleColumn()
+    name = tables.Column(linkify=True)
     isis_config = tables.LinkColumn()
     interface = tables.LinkColumn()
     circuit_type = tables.Column()
@@ -73,9 +75,20 @@ class ISISInterfaceConfigurationTable(StatusTableMixin, BaseTable):
 
     class Meta(BaseTable.Meta):
         model = models.ISISInterfaceConfiguration
-        fields = ("pk", "isis_config", "interface", "circuit_type", "network_type", "metric", "status", "actions")
+        fields = (
+            "pk",
+            "name",
+            "isis_config",
+            "interface",
+            "circuit_type",
+            "network_type",
+            "metric",
+            "status",
+            "actions",
+        )
         default_columns = (
             "pk",
+            "name",
             "isis_config",
             "interface",
             "circuit_type",
@@ -90,6 +103,7 @@ class OSPFConfigurationTable(StatusTableMixin, BaseTable):
     """Table for displaying OSPFConfiguration objects."""
 
     pk = ToggleColumn()
+    name = tables.Column(linkify=True)
     instance = tables.LinkColumn()
     process_id = tables.Column(verbose_name="Process ID")
     actions = ButtonsColumn(
@@ -99,14 +113,15 @@ class OSPFConfigurationTable(StatusTableMixin, BaseTable):
 
     class Meta(BaseTable.Meta):
         model = models.OSPFConfiguration
-        fields = ("pk", "instance", "process_id", "status", "actions")
-        default_columns = ("pk", "instance", "process_id", "status", "actions")
+        fields = ("pk", "name", "instance", "process_id", "status", "actions")
+        default_columns = ("pk", "name", "instance", "process_id", "status", "actions")
 
 
 class OSPFInterfaceConfigurationTable(StatusTableMixin, BaseTable):
     """Table for displaying OSPFInterfaceConfiguration objects."""
 
     pk = ToggleColumn()
+    name = tables.Column(linkify=True)
     ospf_config = tables.LinkColumn()
     interface = tables.LinkColumn()
     area = tables.Column()
@@ -119,5 +134,15 @@ class OSPFInterfaceConfigurationTable(StatusTableMixin, BaseTable):
 
     class Meta(BaseTable.Meta):
         model = models.OSPFInterfaceConfiguration
-        fields = ("pk", "ospf_config", "interface", "area", "network_type", "cost", "status", "actions")
-        default_columns = ("pk", "ospf_config", "interface", "area", "network_type", "cost", "status", "actions")
+        fields = ("pk", "name", "ospf_config", "interface", "area", "network_type", "cost", "status", "actions")
+        default_columns = (
+            "pk",
+            "name",
+            "ospf_config",
+            "interface",
+            "area",
+            "network_type",
+            "cost",
+            "status",
+            "actions",
+        )

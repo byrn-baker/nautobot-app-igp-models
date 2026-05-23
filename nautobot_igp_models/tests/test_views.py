@@ -28,11 +28,11 @@ class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         return {
             "name": "View-Test-IGP-Instance",
             "description": "Test IGP instance from view",
-            "device": self.devices["router1"].pk,
+            "device": self.devices["router3"].pk,
             "protocol": "ISIS",
-            "router_id": self.ip_addresses["router1"].pk,
-            "vrf": self.vrfs["global"].pk,
-            "isis_area": "49.0001",
+            "router_id": self.ip_addresses["router3"].pk,
+            "vrf": self.vrfs["management"].pk,
+            "isis_area": "49.0099",
             "status": self.statuses["active"].pk,
             "tags": [],
         }
@@ -56,7 +56,7 @@ class ISISConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ISISConfiguration views."""
 
     model = models.ISISConfiguration
-    bulk_edit_data = {"system_id": "49.0001.9999.8888.7777.00"}
+    bulk_edit_data = {"default_metric": 99}
     allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
 
     @classmethod
@@ -95,6 +95,7 @@ class ISISInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
 
     model = models.ISISInterfaceConfiguration
     bulk_edit_data = {"metric": 50}
+    allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
 
     @classmethod
     def setUpTestData(cls):
@@ -136,6 +137,7 @@ class OSPFConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     model = models.OSPFConfiguration
     bulk_edit_data = {"process_id": 200}
+    allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
 
     @classmethod
     def setUpTestData(cls):
@@ -173,6 +175,7 @@ class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
 
     model = models.OSPFInterfaceConfiguration
     bulk_edit_data = {"cost": 100}
+    allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
 
     @classmethod
     def setUpTestData(cls):

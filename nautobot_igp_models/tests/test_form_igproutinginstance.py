@@ -36,8 +36,8 @@ class IGPRoutingInstanceTest(TestCase):
     def test_specifying_only_required_success(self):
         form = forms.IGPRoutingInstanceForm(
             data={
-                "name": "Development",
-                "device": self.devices["router1"].pk,
+                "name": "Development-Required-Only",
+                "device": self.devices["router3"].pk,
                 "protocol": "OSPF",
                 "status": self.statuses["active"].pk,
             }
