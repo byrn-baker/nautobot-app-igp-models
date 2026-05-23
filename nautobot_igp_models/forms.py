@@ -241,9 +241,10 @@ class ISISConfigurationBulkEditForm(NautobotBulkEditForm):
     instance = DynamicModelChoiceField(
         queryset=models.IGPRoutingInstance.objects.filter(protocol="ISIS"), required=False, label="IGP Instance"
     )
+    default_metric = forms.IntegerField(required=False, label="Default Metric")
 
     class Meta:
-        nullable_fields = ()
+        nullable_fields = ("default_metric",)
 
 
 # ISISInterfaceConfiguration Forms
@@ -480,4 +481,4 @@ class OSPFInterfaceConfigurationBulkEditForm(NautobotBulkEditForm):
     cost = forms.IntegerField(required=False, label="Cost")
 
     class Meta:
-        nullable_fields = ("area", "network_type", "cost", "status")
+        nullable_fields = ("network_type", "cost", "status")

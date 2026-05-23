@@ -39,6 +39,7 @@ class IGPRoutingInstanceTest(TestCase):
                 "name": "Development-Required-Only",
                 "device": self.devices["router3"].pk,
                 "protocol": "OSPF",
+                "router_id": self.ip_addresses["router3"].pk,
                 "status": self.statuses["active"].pk,
             }
         )
