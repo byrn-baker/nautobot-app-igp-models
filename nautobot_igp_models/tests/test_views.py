@@ -35,6 +35,7 @@ class IGPRoutingInstanceViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "isis_area": "49.0099",
             "status": self.statuses["active"].pk,
             "object_note": "",
+            "dynamic_groups": [],
         }
 
     def get_csv_data(self):
@@ -190,11 +191,12 @@ class OSPFInterfaceConfigurationViewTest(ViewTestCases.PrimaryObjectViewTestCase
         return {
             "name": "View-Test-OSPF-Interface",
             "ospf_config": self.ospf_configurations["router1"].pk,
-            "interface": self.interfaces["router1"]["loopback0"].pk,
-            "area": "0.0.0.0",
+            "interface": self.interfaces["router1"]["ge2"].pk,
+            "area": "0.0.0.99",
             "cost": 10,
             "status": self.statuses["active"].pk,
             "object_note": "",
+            "dynamic_groups": [],
         }
 
     def get_csv_data(self):
